@@ -1,0 +1,37 @@
+{
+	"dialogue" : [
+		{
+			"main" : [
+			{
+				"Responses" : [
+				{
+					"texts" : [
+					{
+						"text" : "Froggit seems reluctant to fight you."
+					}]
+				},
+				{
+					"texts" : [
+					{
+						"text" : "Froggit hopped close!"
+					}]
+				},
+				{
+					"texts" : [
+					{
+						"text" : "The battlefield is filled with the smell of mustard seed."
+					}]
+				},
+				{
+					"texts" : [
+					{
+						"text" : "You are intimidated by Froggit's raw strength."
+					},
+					{
+						"text" : "Only kidding."
+					}]
+				}]
+			}]
+		}
+	]
+}

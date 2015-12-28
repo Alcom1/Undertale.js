@@ -21,11 +21,14 @@ app.sound = (function()
         }
 	}
     
-    function playSound(id)
+    function playSound(id, disrupt)
     {
         var sound = document.querySelector("#" + id);
-        sound.pause();
-        sound.currentTime = 0;
+        if(disrupt)
+        {
+            sound.pause();
+            sound.currentTime = 0;
+        }
         sound.play();
     }
 	

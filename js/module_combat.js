@@ -34,6 +34,7 @@ app.combat = (function()
 	});
     
     var cmenu;
+    var cwriter;
     var hpDisplay;
     var bbox;
     var soul;
@@ -45,7 +46,7 @@ app.combat = (function()
 	function init()
 	{
         //Initial states for combat
-        combatState = COMBAT_STATE.SURVIVE;
+        combatState = COMBAT_STATE.MAIN;
         selectState = SELECT_STATE.FIGHT;
         
         //Combat menu
@@ -67,6 +68,7 @@ app.combat = (function()
     //Initialize with provided canvas.
     function setup(ctx, cur, max)
     {
+        cwriter = new Cwriter();
 		soul.getCollision(ctx);   //Form collision data for player.
         curHealth = cur;
         maxHealth = max;
@@ -78,13 +80,14 @@ app.combat = (function()
         switch(combatState)
         {
             case COMBAT_STATE.MAIN:
+                cwriter.update(dt);
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_RIGHT])
                 {
                     selectState++;
                     if(selectState > SELECT_STATE.MERCY)
                         selectState = SELECT_STATE.MERCY;
                     else
-                        app.main.sound.playSound("button");
+                        app.main.sound.playSound("button", true);
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_LEFT])
                 {
@@ -92,7 +95,7 @@ app.combat = (function()
                     if(selectState < SELECT_STATE.FIGHT)
                         selectState = SELECT_STATE.FIGHT;
                     else
-                        app.main.sound.playSound("button");
+                        app.main.sound.playSound("button", true);
                 }
                 break;
             case COMBAT_STATE.FIGHT:
@@ -130,6 +133,7 @@ app.combat = (function()
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, selectState, SELECT_STATE);
+                cwriter.draw(ctx);
                 switch(selectState)
                 {
                     case SELECT_STATE.FIGHT:
