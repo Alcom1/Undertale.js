@@ -45,7 +45,7 @@ app.combat = (function()
 	function init()
 	{
         //Initial states for combat
-        combatState = COMBAT_STATE.MAIN;
+        combatState = COMBAT_STATE.SURVIVE;
         selectState = SELECT_STATE.FIGHT;
         
         //Combat menu
@@ -117,7 +117,8 @@ app.combat = (function()
         }
         
         //Tapping mode.
-        myKeys.keydown = [];
+        if(combatState != COMBAT_STATE.SURVIVE)
+            myKeys.keydown = [];
 	}
     
     //Draw
@@ -148,31 +149,37 @@ app.combat = (function()
             case COMBAT_STATE.FIGHT:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
+                cmenu.draw(ctx, 0, SELECT_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ACT:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
+                cmenu.draw(ctx, 0, SELECT_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ITEM:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
+                cmenu.draw(ctx, 0, SELECT_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.MERCY:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
+                cmenu.draw(ctx, 0, SELECT_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ASSAULT:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
+                cmenu.draw(ctx, 0, SELECT_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.SURVIVE:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
+                cmenu.draw(ctx, 0, SELECT_STATE);
 				soul.checkCollision(ctx);
 				soul.draw(ctx);
                 break;
