@@ -21,7 +21,8 @@ app.combat = (function()
         ASSAULT : 5,
         SURVIVE : 6,
         FLASH : 7,
-        DEATH : 8
+        DEATH : 8,
+        NAME : 9
 	});
     
 	var selectState;
@@ -70,6 +71,10 @@ app.combat = (function()
     {
         cwriter = new Cwriter(
             "* JavaScript is a high-level,  dynamic,  \nuntyped,  and interpreted programming \nlanguage.  -Wikipedia",
+            ["Enemy"],
+            ["Check", "Beep", "Boop"],
+            ["Item A", "Item B", "Item C", "Item D"],
+            ["Mercy", "Flee"],
             .75,
             .33,
             .21,
@@ -106,14 +111,39 @@ app.combat = (function()
                 {
                     cwriter.skip();
                 }
+            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
+                {
+                    combatState = COMBAT_STATE.NAME;
+                    app.main.sound.playSound("button", true);
+                }
                 break;
             case COMBAT_STATE.FIGHT:
+            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
+                {
+                    combatState = COMBAT_STATE.NAME;
+                    app.main.sound.playSound("button", true);
+                }
                 break;
             case COMBAT_STATE.ACT:
+            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
+                {
+                    combatState = COMBAT_STATE.NAME;
+                    app.main.sound.playSound("button", true);
+                }
                 break;
             case COMBAT_STATE.ITEM:
+            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
+                {
+                    combatState = COMBAT_STATE.NAME;
+                    app.main.sound.playSound("button", true);
+                }
                 break;
             case COMBAT_STATE.MERCY:
+            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
+                {
+                    combatState = COMBAT_STATE.NAME;
+                    app.main.sound.playSound("button", true);
+                }
                 break;
             case COMBAT_STATE.ASSAULT:
                 break;
@@ -125,6 +155,19 @@ app.combat = (function()
             case COMBAT_STATE.FLASH:
                 break;
             case COMBAT_STATE.DEATH:
+                break;
+            case COMBAT_STATE.NAME:
+            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
+                {
+                    combatState = selectState;
+                    app.main.sound.playSound("button", true);
+                }
+            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
+                {
+                    combatState = COMBAT_STATE.MAIN;
+                    cwriter.reset();
+                    app.main.sound.playSound("button", true);
+                }
                 break;
         }
         
@@ -142,7 +185,7 @@ app.combat = (function()
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, selectState, SELECT_STATE);
-                cwriter.draw(ctx);
+                cwriter.drawText(ctx);
                 switch(selectState)
                 {
                     case SELECT_STATE.FIGHT:
@@ -163,24 +206,28 @@ app.combat = (function()
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, SELECT_STATE);
+                cwriter.drawOption(ctx, selectState, SELECT_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ACT:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, SELECT_STATE);
+                cwriter.drawOption(ctx, selectState, SELECT_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ITEM:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, SELECT_STATE);
+                cwriter.drawOption(ctx, selectState, SELECT_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.MERCY:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, SELECT_STATE);
+                cwriter.drawOption(ctx, selectState, SELECT_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ASSAULT:
@@ -200,6 +247,13 @@ app.combat = (function()
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.DEATH:
+				soul.draw(ctx);
+                break;
+            case COMBAT_STATE.NAME:
+				bbox.draw(ctx);
+				hpDisplay.draw(ctx, curHealth, maxHealth);
+                cmenu.draw(ctx, selectState, SELECT_STATE);
+				cwriter.drawOption(ctx, 0, SELECT_STATE);
 				soul.draw(ctx);
                 break;
         }

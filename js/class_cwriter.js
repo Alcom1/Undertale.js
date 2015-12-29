@@ -1,12 +1,20 @@
 //Dialogue writer and selector for combat sequence.
 var Cwriter = function(
     text,
+    names,
+    acts,
+    items,
+    mercies,
     timeAsterisk,
     timePeriod,
     timeComma,
     timeStandard)
 {
     this.text = text;
+    this.names = names;
+    this.acts = acts;
+    this.items = items;
+    this.mercies = mercies;
     this.charCounter = 0;       //Counter for the index of the most recent displayed character.
     this.timeCounter = 0;       //Counter for the time since a character was placed.
     this.timeCheck = 0;         //Current interval to wait to place a character. Changes based on special characters.
@@ -52,7 +60,7 @@ Cwriter.prototype.update = function(dt)
 }
 
 // Display the writer's text.
-Cwriter.prototype.draw = function(ctx)
+Cwriter.prototype.drawText = function(ctx)
 {
     ctx.save();
     
@@ -73,8 +81,8 @@ Cwriter.prototype.draw = function(ctx)
         {
             ctx.fillText(
                 this.text.charAt(i),
-                textXPos + 1.5 * Math.floor(Math.random() * 1.001),
-                textYPos + 1.5 * Math.floor(Math.random() * 1.001));
+                textXPos + 2 * Math.floor(Math.random() * 1.0004),     //Random text wobble.
+                textYPos + 2 * Math.floor(Math.random() * 1.0004));
         }
         if(this.text.charAt(i + 1) == "\n") //New line moveover.
         {
@@ -95,10 +103,35 @@ Cwriter.prototype.draw = function(ctx)
     ctx.restore();
 }
 
+//Draw an option menu.
+Cwriter.prototype.drawOption = function(ctx, selectState, SELECT_STATE)
+{
+    switch(selectState)
+    {
+        case SELECT_STATE.FIGHT:
+            break;
+        case SELECT_STATE.ACT:
+            break;
+        case SELECT_STATE.ITEM:
+            break;
+        case SELECT_STATE.MERCY:
+            break;
+        default:
+            break;
+    }
+}
+
 //Skip text growing entirely.
 Cwriter.prototype.skip = function()
 {
     this.charCounter = this.text.length; 
+}
+
+//Reset text
+Cwriter.prototype.reset = function()
+{
+    this.charCounter = 0;
+    this.timeCounter = 0;  
 }
 
 //Get a soul 
