@@ -1,7 +1,12 @@
 //Dialogue writer and selector for combat sequence.
-var Cwriter = function()
+var Cwriter = function(
+    text,
+    timeAsterisk,
+    timePeriod,
+    timeComma,
+    timeStandard)
 {
-    this.text = "* JavaScript is a high-level, dynamic, \nuntyped, and interpreted programming \nlanguage. -Wikipedia";
+    this.text = text;
     this.charCounter = 0;       //Counter for the index of the most recent displayed character.
     this.timeCounter = 0;       //Counter for the time since a character was placed.
     this.timeCheck = 0;         //Current interval to wait to place a character. Changes based on special characters.
@@ -52,8 +57,9 @@ Cwriter.prototype.draw = function(ctx)
     ctx.save();
     
     //Style.
-    ctx.font = "32px undertale";
+    ctx.font = "24pt undertale";
     ctx.fillStyle = "#FFF";
+    ctx.textAlign = "center";
     
     //Initial asterisk.
     var textXPos = 52;
@@ -67,10 +73,9 @@ Cwriter.prototype.draw = function(ctx)
         {
             ctx.fillText(
                 this.text.charAt(i),
-                textXPos,
-                textYPos);
+                textXPos + Math.floor(Math.random() * 1.002) - 1,
+                textYPos + Math.floor(Math.random() * 1.002) - 1);
         }
-        
         if(this.text.charAt(i + 1) == "\n") //New line moveover.
         {
             textXPos = 64;
@@ -81,13 +86,19 @@ Cwriter.prototype.draw = function(ctx)
             textXPos = 52;
             textYPos += 32;
         }
-        else                            //Next-char moveover.
+        else                                //Next-char moveover.
         {
             textXPos += ctx.measureText(this.text.charAt(i)).width;
         }
     }
     
     ctx.restore();
+}
+
+//Skip text growing entirely.
+Cwriter.prototype.skip = function()
+{
+    this.charCounter = this.text.length; 
 }
 
 //Get a soul 

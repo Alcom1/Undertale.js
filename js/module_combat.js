@@ -68,7 +68,12 @@ app.combat = (function()
     //Initialize with provided canvas.
     function setup(ctx, cur, max)
     {
-        cwriter = new Cwriter();
+        cwriter = new Cwriter(
+            "* JavaScript is a high-level,  dynamic,  \nuntyped,  and interpreted programming \nlanguage.  -Wikipedia",
+            .75,
+            .33,
+            .21,
+            .033);
 		soul.getCollision(ctx);   //Form collision data for player.
         curHealth = cur;
         maxHealth = max;
@@ -96,6 +101,10 @@ app.combat = (function()
                         selectState = SELECT_STATE.FIGHT;
                     else
                         app.main.sound.playSound("button", true);
+                }
+            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
+                {
+                    cwriter.skip();
                 }
                 break;
             case COMBAT_STATE.FIGHT:
