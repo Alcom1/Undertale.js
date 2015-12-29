@@ -12,24 +12,24 @@ var Cmenu = function()
     this.buttonMercyOver = document.getElementById("button_mercy_over");
 }
 
-Cmenu.prototype.draw = function(ctx, selectState, SELECT_STATE)
+Cmenu.prototype.draw = function(ctx, menuState, selectState)
 {
     ctx.save();
     
 	ctx.drawImage(                                 //Draw fight button
-		selectState == SELECT_STATE.FIGHT ? this.buttonFightOver : this.buttonFight,
+		menuState == selectState.FIGHT ? this.buttonFightOver : this.buttonFight,
 		32, 
 		432);
 	ctx.drawImage(                                 //Draw act button
-		selectState == SELECT_STATE.ACT ? this.buttonActOver : this.buttonAct,
+		menuState == selectState.ACT ? this.buttonActOver : this.buttonAct,
 		185, 
 		432);
 	ctx.drawImage(                                 //Draw item button
-		selectState == SELECT_STATE.ITEM ? this.buttonItemOver : this.buttonItem,
+		menuState == selectState.ITEM ? this.buttonItemOver : this.buttonItem,
 		345, 
 		432);
 	ctx.drawImage(                                 //Draw mercy button
-		selectState == SELECT_STATE.MERCY ? this.buttonMercyOver : this.buttonMercy,
+		menuState == selectState.MERCY ? this.buttonMercyOver : this.buttonMercy,
 		500, 
 		432);
         

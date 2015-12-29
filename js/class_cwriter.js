@@ -67,9 +67,8 @@ Cwriter.prototype.drawText = function(ctx)
     //Style.
     ctx.font = "24pt undertale";
     ctx.fillStyle = "#FFF";
-    ctx.textAlign = "center";
     
-    //Initial asterisk.
+    //Initial position.
     var textXPos = 52;
     var textYPos = 296;
     
@@ -84,12 +83,13 @@ Cwriter.prototype.drawText = function(ctx)
                 textXPos + 2 * Math.floor(Math.random() * 1.0004),     //Random text wobble.
                 textYPos + 2 * Math.floor(Math.random() * 1.0004));
         }
+        
         if(this.text.charAt(i + 1) == "\n") //New line moveover.
         {
             textXPos = 64;
             textYPos += 32;
         }
-        if(this.text.charAt(i + 1) == "*")  //Asterisk moveover
+        else if(this.text.charAt(i + 1) == "*")  //Asterisk moveover
         {
             textXPos = 52;
             textYPos += 32;
@@ -103,22 +103,78 @@ Cwriter.prototype.drawText = function(ctx)
     ctx.restore();
 }
 
-//Draw an option menu.
-Cwriter.prototype.drawOption = function(ctx, selectState, SELECT_STATE)
+//Draw an option menu. 
+Cwriter.prototype.drawOption = function(ctx, menuState, MENU_STATE, selectState)
 {
-    switch(selectState)
+    ctx.save();
+    
+    //Style.
+    ctx.font = "24pt undertale";
+    ctx.fillStyle = "#FFF";
+    
+    switch(menuState)
     {
-        case SELECT_STATE.FIGHT:
+        case MENU_STATE.ACT:
+            this.drawOptionTexts(ctx, this.acts);
             break;
-        case SELECT_STATE.ACT:
+        case MENU_STATE.ITEM:
+            this.drawOptionTexts(ctx, this.items);
             break;
-        case SELECT_STATE.ITEM:
-            break;
-        case SELECT_STATE.MERCY:
+        case MENU_STATE.MERCY:
+            this.drawOptionTexts(ctx, this.mercies);
             break;
         default:
+            this.drawOptionTexts(ctx, this.names);
             break;
     }
+    
+    ctx.restore();
+}
+
+//Draw text for all options.
+Cwriter.prototype.drawOptionTexts = function(ctx, options)
+{
+    for(var i = 0; i < options.length; i++)     
+    {
+        switch(i)
+        {
+            case 0:
+                this.drawOptionText(ctx, options[i], 100, 296);
+                break;
+            case 1:
+                this.drawOptionText(ctx, options[i], 100, 328);
+                break;
+            case 2:
+                this.drawOptionText(ctx, options[i], 356, 296);
+                break;
+            case 3:
+                this.drawOptionText(ctx, options[i], 356, 328);
+                break;
+        }
+    }
+}
+
+//Draw text for an option.
+Cwriter.prototype.drawOptionText = function(ctx, option, xPos, yPos)
+{
+    //Asterisk.
+    ctx.fillText(
+        "*",
+        xPos + 2 * Math.floor(Math.random() * 1.0004),
+        yPos + 2 * Math.floor(Math.random() * 1.0004));
+    
+    //Text offset.
+    xPos += 32;
+    
+    //Draw characters.
+    for(var i = 0; i < this.text.length; i++)
+    { 
+        ctx.fillText(
+            option.charAt(i),
+            xPos + 2 * Math.floor(Math.random() * 1.0004),     //Random text wobble.
+            yPos + 2 * Math.floor(Math.random() * 1.0004));
+        xPos += ctx.measureText(option.charAt(i)).width;
+    }    
 }
 
 //Skip text growing entirely.

@@ -25,14 +25,16 @@ app.combat = (function()
         NAME : 9
 	});
     
-	var selectState;
-    var SELECT_STATE = Object.freeze
+	var menuState;
+    var MENU_STATE = Object.freeze
 	({
 		FIGHT : 1,
 		ACT : 2,
         ITEM : 3,
         MERCY : 4,
 	});
+    
+    var selectState;
     
     var cmenu;
     var cwriter;
@@ -48,7 +50,8 @@ app.combat = (function()
 	{
         //Initial states for combat
         combatState = COMBAT_STATE.MAIN;
-        selectState = SELECT_STATE.FIGHT;
+        menuState = MENU_STATE.FIGHT;
+        selectState = 0;
         
         //Combat menu
         cmenu = new Cmenu();
@@ -93,17 +96,17 @@ app.combat = (function()
                 cwriter.update(dt);
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_RIGHT])
                 {
-                    selectState++;
-                    if(selectState > SELECT_STATE.MERCY)
-                        selectState = SELECT_STATE.MERCY;
+                    menuState++;
+                    if(menuState > MENU_STATE.MERCY)
+                        menuState = MENU_STATE.MERCY;
                     else
                         app.main.sound.playSound("button", true);
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_LEFT])
                 {
-                    selectState--;
-                    if(selectState < SELECT_STATE.FIGHT)
-                        selectState = SELECT_STATE.FIGHT;
+                    menuState--;
+                    if(menuState < MENU_STATE.FIGHT)
+                        menuState = MENU_STATE.FIGHT;
                     else
                         app.main.sound.playSound("button", true);
                 }
@@ -159,7 +162,7 @@ app.combat = (function()
             case COMBAT_STATE.NAME:
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
-                    combatState = selectState;
+                    combatState = menuState;
                     app.main.sound.playSound("button", true);
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
@@ -184,20 +187,20 @@ app.combat = (function()
             case COMBAT_STATE.MAIN:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
-                cmenu.draw(ctx, selectState, SELECT_STATE);
+                cmenu.draw(ctx, menuState, MENU_STATE);
                 cwriter.drawText(ctx);
-                switch(selectState)
+                switch(menuState)
                 {
-                    case SELECT_STATE.FIGHT:
+                    case MENU_STATE.FIGHT:
 				        soul.drawAt(ctx, new Vect(40, 446, 0));
                         break;
-                    case SELECT_STATE.ACT:
+                    case MENU_STATE.ACT:
 				        soul.drawAt(ctx, new Vect(193, 446, 0));
                         break;
-                    case SELECT_STATE.ITEM:
+                    case MENU_STATE.ITEM:
 				        soul.drawAt(ctx, new Vect(353, 446, 0));
                         break;
-                    case SELECT_STATE.MERCY:
+                    case MENU_STATE.MERCY:
 				        soul.drawAt(ctx, new Vect(508, 446, 0));
                         break;
                 }
@@ -205,41 +208,41 @@ app.combat = (function()
             case COMBAT_STATE.FIGHT:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
-                cmenu.draw(ctx, 0, SELECT_STATE);
-                cwriter.drawOption(ctx, selectState, SELECT_STATE);
+                cmenu.draw(ctx, 0, MENU_STATE);
+                cwriter.drawOption(ctx, menuState, MENU_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ACT:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
-                cmenu.draw(ctx, 0, SELECT_STATE);
-                cwriter.drawOption(ctx, selectState, SELECT_STATE);
+                cmenu.draw(ctx, 0, MENU_STATE);
+                cwriter.drawOption(ctx, menuState, MENU_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ITEM:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
-                cmenu.draw(ctx, 0, SELECT_STATE);
-                cwriter.drawOption(ctx, selectState, SELECT_STATE);
+                cmenu.draw(ctx, 0, MENU_STATE);
+                cwriter.drawOption(ctx, menuState, MENU_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.MERCY:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
-                cmenu.draw(ctx, 0, SELECT_STATE);
-                cwriter.drawOption(ctx, selectState, SELECT_STATE);
+                cmenu.draw(ctx, 0, MENU_STATE);
+                cwriter.drawOption(ctx, menuState, MENU_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ASSAULT:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
-                cmenu.draw(ctx, 0, SELECT_STATE);
+                cmenu.draw(ctx, 0, MENU_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.SURVIVE:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
-                cmenu.draw(ctx, 0, SELECT_STATE);
+                cmenu.draw(ctx, 0, MENU_STATE);
 				soul.checkCollision(ctx);
 				soul.draw(ctx);
                 break;
@@ -252,8 +255,8 @@ app.combat = (function()
             case COMBAT_STATE.NAME:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
-                cmenu.draw(ctx, selectState, SELECT_STATE);
-				cwriter.drawOption(ctx, 0, SELECT_STATE);
+                cmenu.draw(ctx, menuState, MENU_STATE);
+				cwriter.drawOption(ctx, 0, MENU_STATE, selectState);
 				soul.draw(ctx);
                 break;
         }
