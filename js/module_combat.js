@@ -209,7 +209,6 @@ app.combat = (function()
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, MENU_STATE);
-                cwriter.drawOption(ctx, menuState, MENU_STATE);
 				soul.draw(ctx);
                 break;
             case COMBAT_STATE.ACT:

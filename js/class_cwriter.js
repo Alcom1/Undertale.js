@@ -22,6 +22,21 @@ var Cwriter = function(
     this.timePeriod = .33;      //Interval to use for periods.
     this.timeComma = .21;       //Interval to use for commas.
     this.timeStandard = .033;   //Interval to use for all other characters.
+    
+    this.horizontalPositions =
+    [
+        [100, 296],
+        [100, 328],
+        [356, 296],
+        [356, 328]
+    ]
+    
+    this.verticalPositions =
+    [
+        [100, 296],
+        [100, 328],
+        [100, 360]
+    ]
 }
 
 //Update the writer.
@@ -115,16 +130,16 @@ Cwriter.prototype.drawOption = function(ctx, menuState, MENU_STATE, selectState)
     switch(menuState)
     {
         case MENU_STATE.ACT:
-            this.drawOptionTexts(ctx, this.acts);
+            this.drawOptionTexts(ctx, this.acts, this.horizontalPositions);
             break;
         case MENU_STATE.ITEM:
-            this.drawOptionTexts(ctx, this.items);
+            this.drawOptionTexts(ctx, this.items, this.horizontalPositions);
             break;
         case MENU_STATE.MERCY:
-            this.drawOptionTexts(ctx, this.mercies);
+            this.drawOptionTexts(ctx, this.mercies, this.verticalPositions);
             break;
         default:
-            this.drawOptionTexts(ctx, this.names);
+            this.drawOptionTexts(ctx, this.names, this.verticalPositions);
             break;
     }
     
@@ -132,23 +147,23 @@ Cwriter.prototype.drawOption = function(ctx, menuState, MENU_STATE, selectState)
 }
 
 //Draw text for all options.
-Cwriter.prototype.drawOptionTexts = function(ctx, options)
+Cwriter.prototype.drawOptionTexts = function(ctx, options, positions)
 {
     for(var i = 0; i < options.length; i++)     
     {
         switch(i)
         {
             case 0:
-                this.drawOptionText(ctx, options[i], 100, 296);
+                this.drawOptionText(ctx, options[i], positions[i][0], positions[i][1]);
                 break;
             case 1:
-                this.drawOptionText(ctx, options[i], 100, 328);
+                this.drawOptionText(ctx, options[i], positions[i][0], positions[i][1]);
                 break;
             case 2:
-                this.drawOptionText(ctx, options[i], 356, 296);
+                this.drawOptionText(ctx, options[i], positions[i][0], positions[i][1]);
                 break;
             case 3:
-                this.drawOptionText(ctx, options[i], 356, 328);
+                this.drawOptionText(ctx, options[i], positions[i][0], positions[i][1]);
                 break;
         }
     }
