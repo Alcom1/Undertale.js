@@ -73,8 +73,8 @@ Cwriter.prototype.draw = function(ctx)
         {
             ctx.fillText(
                 this.text.charAt(i),
-                textXPos + Math.floor(Math.random() * 1.002) - 1,
-                textYPos + Math.floor(Math.random() * 1.002) - 1);
+                textXPos + 1.5 * Math.floor(Math.random() * 1.001),
+                textYPos + 1.5 * Math.floor(Math.random() * 1.001));
         }
         if(this.text.charAt(i + 1) == "\n") //New line moveover.
         {
