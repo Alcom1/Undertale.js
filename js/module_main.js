@@ -48,7 +48,15 @@ app.main =
         this.gameState = this.GAME_STATE.COMBAT;
         
         //Setup combat module.
-        this.combat.setup(this.ctx, 20, 20);
+        this.combat.setup(
+            this.ctx, 
+            20, 
+            20,
+            ["* JavaScript is a high-level,  dynamic,  \nuntyped,  and interpreted programming \nlanguage.  -Wikipedia"],
+            ["Enemy"],
+            ["Check", "Beep", "Boop"],
+            ["Item A", "Item B", "Item C", "Item D"],
+            ["Mercy", "Flee"]);
 		
 		// start the game loop
 		this.frame();

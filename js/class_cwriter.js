@@ -1,22 +1,10 @@
 //Dialogue writer and selector for combat sequence.
 var Cwriter = function(
-    text,
-    names,
-    acts,
-    items,
-    mercies,
     timeAsterisk,
     timePeriod,
     timeComma,
     timeStandard)
 {
-    this.text = text;
-    this.names = names;
-    this.acts = acts;
-    this.items = items;
-    this.mercies = mercies;
-    this.charCounter = 0;       //Counter for the index of the most recent displayed character.
-    this.timeCounter = 0;       //Counter for the time since a character was placed.
     this.timeCheck = 0;         //Current interval to wait to place a character. Changes based on special characters.
     this.timeAsterisk = .75;    //Interval to use for asterisk.
     this.timePeriod = .33;      //Interval to use for periods.
@@ -126,8 +114,8 @@ Cwriter.prototype.drawText = function(ctx)
     ctx.restore();
 }
 
-//Draw an option menu. 
-Cwriter.prototype.drawOption = function(ctx, menuState, MENU_STATE, selectState)
+//Draw a menu. 
+Cwriter.prototype.drawMenu = function(ctx, menu, menuState, MENU_STATE)
 {
     ctx.save();
     
@@ -138,47 +126,47 @@ Cwriter.prototype.drawOption = function(ctx, menuState, MENU_STATE, selectState)
     switch(menuState)
     {
         case MENU_STATE.ACT:
-            this.drawOptionTexts(ctx, this.acts, this.horizontalPositions);
+            this.drawMenuTexts(ctx, menu, this.horizontalPositions);
             break;
         case MENU_STATE.ITEM:
-            this.drawOptionTexts(ctx, this.items, this.horizontalPositions);
+            this.drawMenuTexts(ctx, menu, this.horizontalPositions);
             break;
         case MENU_STATE.MERCY:
-            this.drawOptionTexts(ctx, this.mercies, this.verticalPositions);
+            this.drawMenuTexts(ctx, menu, this.verticalPositions);
             break;
         default:
-            this.drawOptionTexts(ctx, this.names, this.verticalPositions);
+            this.drawMenuTexts(ctx, menu, this.verticalPositions);
             break;
     }
     
     ctx.restore();
 }
 
-//Draw text for all options.
-Cwriter.prototype.drawOptionTexts = function(ctx, options, positions)
+//Draw text for all menu options.
+Cwriter.prototype.drawMenuTexts = function(ctx, menu, positions)
 {
-    for(var i = 0; i < options.length; i++)     
+    for(var i = 0; i < menu.length; i++)     
     {
         switch(i)
         {
             case 0:
-                this.drawOptionText(ctx, options[i], positions[i][0], positions[i][1]);
+                this.drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
                 break;
             case 1:
-                this.drawOptionText(ctx, options[i], positions[i][0], positions[i][1]);
+                this.drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
                 break;
             case 2:
-                this.drawOptionText(ctx, options[i], positions[i][0], positions[i][1]);
+                this.drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
                 break;
             case 3:
-                this.drawOptionText(ctx, options[i], positions[i][0], positions[i][1]);
+                this.drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
                 break;
         }
     }
 }
 
-//Draw text for an option.
-Cwriter.prototype.drawOptionText = function(ctx, option, xPos, yPos)
+//Draw text for a menu option.
+Cwriter.prototype.drawMenuText = function(ctx, option, xPos, yPos)
 {
     //Asterisk.
     ctx.fillText(
