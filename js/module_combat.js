@@ -34,7 +34,8 @@ app.combat = (function()
         MERCY : 4,    //Player has selected to offer mercy.
 	});
     
-    var selectState;  //Index of currently selected option in any menu.
+    var selectStateEnemy;  //Index of currently selected enemy.
+    var selectStateOther;  //Index of currently selected anything else.
     
     var cmenu;        //Menu button display object.
     var cwriter;      //Text display object.
@@ -58,7 +59,8 @@ app.combat = (function()
         //Initial states for combat
         combatState = COMBAT_STATE.MAIN;
         menuState = MENU_STATE.FIGHT;
-        selectState = 0;
+        selectStateEnemy = 0;
+        selectStateOther = 0;
         
         //Combat menu
         cmenu = new Cmenu();
@@ -136,8 +138,7 @@ app.combat = (function()
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
-                    combatState = COMBAT_STATE.NAME;
-                    selectState = 0;
+                    combatState = menuState == MENU_STATE.ITEM ? COMBAT_STATE.ITEM : COMBAT_STATE.NAME;
                     app.main.sound.playSound("button", true);
                 }
                 break;
@@ -152,28 +153,26 @@ app.combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.NAME;
-                    selectState = 0;
                     app.main.sound.playSound("button", true);
                 }
-                detectHorizontalSelect(acts);
+                selectStateOther = detectHorizontalSelect(acts[selectStateEnemy], selectStateOther);
                 break;
             case COMBAT_STATE.ITEM:
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
-                    combatState = COMBAT_STATE.NAME;
-                    selectState = 0;
+                    combatState = COMBAT_STATE.MAIN;
+                    cwriter.reset();
                     app.main.sound.playSound("button", true);
                 }
-                detectHorizontalSelect(items);
+                selectStateOther = detectHorizontalSelect(items, selectStateOther);
                 break;
             case COMBAT_STATE.MERCY:
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.NAME;
-                    selectState = 0;
                     app.main.sound.playSound("button", true);
                 }
-                detectVerticalSelect(mercies);
+                selectStateOther = detectVerticalSelect(mercies, selectStateOther);
                 break;
             case COMBAT_STATE.ASSAULT:
                 break;
@@ -190,7 +189,7 @@ app.combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = menuState;
-                    selectState = 0;
+                    selectStateOther = 0;
                     app.main.sound.playSound("button", true);
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
@@ -199,7 +198,7 @@ app.combat = (function()
                     cwriter.reset();
                     app.main.sound.playSound("button", true);
                 }
-                detectVerticalSelect(names);
+                selectStateEnemy = detectVerticalSelect(names, selectStateEnemy);
                 break;
         }
         
@@ -244,22 +243,22 @@ app.combat = (function()
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, MENU_STATE);
-                cwriter.drawMenu(ctx, acts, menuState, MENU_STATE);
-				soul.drawAt(ctx, cwriter.getSoulPos(selectState, 0));
+                cwriter.drawMenu(ctx, acts[selectStateEnemy], menuState, MENU_STATE);
+				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 0));
                 break;
             case COMBAT_STATE.ITEM:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, MENU_STATE);
                 cwriter.drawMenu(ctx, items, menuState, MENU_STATE);
-				soul.drawAt(ctx, cwriter.getSoulPos(selectState, 0));
+				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 0));
                 break;
             case COMBAT_STATE.MERCY:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, MENU_STATE);
                 cwriter.drawMenu(ctx, mercies, menuState, MENU_STATE);
-				soul.drawAt(ctx, cwriter.getSoulPos(selectState, 1));
+				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 1));
                 break;
             case COMBAT_STATE.ASSAULT:
 				bbox.draw(ctx);
@@ -285,67 +284,71 @@ app.combat = (function()
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, menuState, MENU_STATE);
 				cwriter.drawMenu(ctx, names, 0, MENU_STATE);
-				soul.drawAt(ctx, cwriter.getSoulPos(selectState, 1));
+				soul.drawAt(ctx, cwriter.getSoulPos(selectStateEnemy, 1));
                 break;
         }
 	}
     
     //Detect a selection change in a horizontally-positioned menu and change the selection.
-    function detectHorizontalSelect(options)
+    function detectHorizontalSelect(options, state)
     {
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_LEFT])
         {
-            if(selectState % 2)
+            if(state % 2)
             {
-                selectState--;
+                state--;
                 app.main.sound.playSound("button", true);
             }
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_RIGHT])
         {
-            if((selectState + 1) % 2 && selectState < options.length)
+            if((state + 1) % 2 && state < options.length - 1)
             {
-                selectState++;
+                state++;
                 app.main.sound.playSound("button", true);
             }
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_UP])
         {
-            if(selectState > 1)
+            if(state > 1)
             {
-                selectState -= 2;
+                state -= 2;
                 app.main.sound.playSound("button", true);
             }
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_DOWN])
         {
-            if(selectState < options.length - 1)
+            if(state < options.length - 2)
             {
-                selectState += 2;
+                state += 2;
                 app.main.sound.playSound("button", true);
             }
         }
+        
+        return state;
     }
     
     //Detect a selection change in a vertically-positioned menu and change the selection.
-    function detectVerticalSelect(options)
+    function detectVerticalSelect(options, state)
     {
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_UP])
         {
-            if(selectState > 0)
+            if(state > 0)
             {
-                selectState --;
+                state --;
                 app.main.sound.playSound("button", true);
             }
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_DOWN])
         {
-            if(selectState < options.length - 1)
+            if(state < options.length - 1)
             {
-                selectState ++;
+                state ++;
                 app.main.sound.playSound("button", true);
             }
         }
+        
+        return state;
     }
 	
 	// export a public interface to this module (Why does this need to be same line bracket?)
