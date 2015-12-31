@@ -137,6 +137,7 @@ app.combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = COMBAT_STATE.NAME;
+                    selectState = 0;
                     app.main.sound.playSound("button", true);
                 }
                 break;
@@ -151,22 +152,28 @@ app.combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.NAME;
+                    selectState = 0;
                     app.main.sound.playSound("button", true);
                 }
+                detectHorizontalSelect(acts);
                 break;
             case COMBAT_STATE.ITEM:
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.NAME;
+                    selectState = 0;
                     app.main.sound.playSound("button", true);
                 }
+                detectHorizontalSelect(items);
                 break;
             case COMBAT_STATE.MERCY:
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.NAME;
+                    selectState = 0;
                     app.main.sound.playSound("button", true);
                 }
+                detectVerticalSelect(mercies);
                 break;
             case COMBAT_STATE.ASSAULT:
                 break;
@@ -183,6 +190,7 @@ app.combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = menuState;
+                    selectState = 0;
                     app.main.sound.playSound("button", true);
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
@@ -191,6 +199,7 @@ app.combat = (function()
                     cwriter.reset();
                     app.main.sound.playSound("button", true);
                 }
+                detectVerticalSelect(names);
                 break;
         }
         
@@ -236,21 +245,21 @@ app.combat = (function()
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, MENU_STATE);
                 cwriter.drawMenu(ctx, acts, menuState, MENU_STATE);
-				soul.draw(ctx);
+				soul.drawAt(ctx, cwriter.getSoulPos(selectState, 0));
                 break;
             case COMBAT_STATE.ITEM:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, MENU_STATE);
                 cwriter.drawMenu(ctx, items, menuState, MENU_STATE);
-				soul.draw(ctx);
+				soul.drawAt(ctx, cwriter.getSoulPos(selectState, 0));
                 break;
             case COMBAT_STATE.MERCY:
 				bbox.draw(ctx);
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, 0, MENU_STATE);
                 cwriter.drawMenu(ctx, mercies, menuState, MENU_STATE);
-				soul.draw(ctx);
+				soul.drawAt(ctx, cwriter.getSoulPos(selectState, 1));
                 break;
             case COMBAT_STATE.ASSAULT:
 				bbox.draw(ctx);
@@ -276,16 +285,74 @@ app.combat = (function()
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, menuState, MENU_STATE);
 				cwriter.drawMenu(ctx, names, 0, MENU_STATE);
-				soul.draw(ctx);
+				soul.drawAt(ctx, cwriter.getSoulPos(selectState, 1));
                 break;
         }
 	}
+    
+    //Detect a selection change in a horizontally-positioned menu and change the selection.
+    function detectHorizontalSelect(options)
+    {
+        if(myKeys.keydown[myKeys.KEYBOARD.KEY_LEFT])
+        {
+            if(selectState % 2)
+            {
+                selectState--;
+                app.main.sound.playSound("button", true);
+            }
+        }
+        if(myKeys.keydown[myKeys.KEYBOARD.KEY_RIGHT])
+        {
+            if((selectState + 1) % 2 && selectState < options.length)
+            {
+                selectState++;
+                app.main.sound.playSound("button", true);
+            }
+        }
+        if(myKeys.keydown[myKeys.KEYBOARD.KEY_UP])
+        {
+            if(selectState > 1)
+            {
+                selectState -= 2;
+                app.main.sound.playSound("button", true);
+            }
+        }
+        if(myKeys.keydown[myKeys.KEYBOARD.KEY_DOWN])
+        {
+            if(selectState < options.length - 1)
+            {
+                selectState += 2;
+                app.main.sound.playSound("button", true);
+            }
+        }
+    }
+    
+    //Detect a selection change in a vertically-positioned menu and change the selection.
+    function detectVerticalSelect(options)
+    {
+        if(myKeys.keydown[myKeys.KEYBOARD.KEY_UP])
+        {
+            if(selectState > 0)
+            {
+                selectState --;
+                app.main.sound.playSound("button", true);
+            }
+        }
+        if(myKeys.keydown[myKeys.KEYBOARD.KEY_DOWN])
+        {
+            if(selectState < options.length - 1)
+            {
+                selectState ++;
+                app.main.sound.playSound("button", true);
+            }
+        }
+    }
 	
 	// export a public interface to this module (Why does this need to be same line bracket?)
 	return {
 		init : init,
         setup : setup,
         update : update,
-        draw : draw
+        draw : draw,
 	}
 }());

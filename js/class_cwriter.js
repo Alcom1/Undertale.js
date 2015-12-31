@@ -14,9 +14,11 @@ var Cwriter = function(
     this.horizontalPositions =
     [
         [100, 296],
-        [100, 328],
         [356, 296],
-        [356, 328]
+        [100, 328],
+        [356, 328],
+        [100, 360],
+        [356, 360]
     ]
     
     this.verticalPositions =
@@ -201,9 +203,25 @@ Cwriter.prototype.reset = function()
     this.timeCounter = 0;  
 }
 
-//Get a soul 
-Cwriter.prototype.getSoulPos = function()
+//Get the soul position for the option at a given menu index and style
+Cwriter.prototype.getSoulPos = function(index, style)
 {
-    var pos = new Vect(0, 0, 0);
+    var pos;
+    
+    switch(style)
+    {
+        case 0:
+            pos = new Vect(
+                this.horizontalPositions[index][0] - 36, 
+                this.horizontalPositions[index][1] - 18, 
+                0);
+            break;
+        case 1:
+            pos = new Vect(
+                this.verticalPositions[index][0] - 36, 
+                this.verticalPositions[index][1] - 18, 
+                0);
+            break;
+    }
     return pos;
 }
