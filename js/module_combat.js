@@ -139,6 +139,7 @@ app.combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = menuState == MENU_STATE.ITEM ? COMBAT_STATE.ITEM : COMBAT_STATE.NAME;
+                    selectStateOther = 0;
                     app.main.sound.playSound("button", true);
                 }
                 break;
@@ -189,7 +190,6 @@ app.combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = menuState;
-                    selectStateOther = 0;
                     app.main.sound.playSound("button", true);
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])

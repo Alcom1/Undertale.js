@@ -53,8 +53,8 @@ app.main =
             20, 
             20,
             ["* JavaScript is a high-level,  dynamic,  \nuntyped,  and interpreted programming \nlanguage.  -Wikipedia"],
-            ["Enemy"],
-            [["Check", "Beep", "Boop"]],
+            ["Enemy", "Other Enemy"],
+            [["Check", "Beep", "Boop"], ["Pet", "Pet", "Pet", "Pet", "Pet"]],
             ["Item A", "Item B", "Item C", "Item D"],
             ["Mercy", "Flee"]);
 		

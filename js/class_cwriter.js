@@ -149,21 +149,7 @@ Cwriter.prototype.drawMenuTexts = function(ctx, menu, positions)
 {
     for(var i = 0; i < menu.length; i++)     
     {
-        switch(i)
-        {
-            case 0:
-                this.drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
-                break;
-            case 1:
-                this.drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
-                break;
-            case 2:
-                this.drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
-                break;
-            case 3:
-                this.drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
-                break;
-        }
+        this.drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
     }
 }
 
