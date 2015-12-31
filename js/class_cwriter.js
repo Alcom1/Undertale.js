@@ -39,13 +39,21 @@ var Cwriter = function(
     ]
 }
 
+//Reset the main text that the writer displays.
+Cwriter.prototype.setText = function(text)
+{
+    this.text = text;
+    this.charCounter = 0;       //Counter for the index of the most recent displayed character.
+    this.timeCounter = 0;       //Counter for the time since a character was placed.
+}
+
 //Update the writer.
 Cwriter.prototype.update = function(dt)
 {
     //Tick.
     this.timeCounter += dt;
     
-    //If time to place a new character.
+    //If time to place a new character and if there is a new character.
     if(this.timeCounter > this.timeCheck && this.charCounter < this.text.length)
     {
         //Reset counter and increment current character for next character.

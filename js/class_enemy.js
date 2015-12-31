@@ -1,5 +1,5 @@
 //Enemy object
-var Enemy = function(pos)
+var Enemy = function()
 {
     
 }

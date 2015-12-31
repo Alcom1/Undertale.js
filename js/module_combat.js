@@ -13,37 +13,37 @@ app.combat = (function()
 	var combatState;
     var COMBAT_STATE = Object.freeze
 	({
-		MAIN : 0,
-		FIGHT : 1,
-		ACT : 2,
-        ITEM : 3,
-        MERCY : 4,
-        ASSAULT : 5,
-        SURVIVE : 6,
-        FLASH : 7,
-        DEATH : 8,
-        NAME : 9
+		MAIN : 0,     //Main state. State in which one of the four options is to be selected.
+		FIGHT : 1,    //State where the player aims.
+		ACT : 2,      //State where the player selects an action.
+        ITEM : 3,     //State where the player selects an item.
+        MERCY : 4,    //State where the player offers mercy or flees.
+        ASSAULT : 5,  //State where the player attacks.
+        SURVIVE : 6,  //State where the player defends themself.
+        FLASH : 7,    //State where the player's flash animation occurs, before the combat sequence begins.
+        DEATH : 8,    //State where the player's death animation occurs, after death.
+        NAME : 9      //State where the player selects an enemy by name.
 	});
     
 	var menuState;
     var MENU_STATE = Object.freeze
 	({
-		FIGHT : 1,
-		ACT : 2,
-        ITEM : 3,
-        MERCY : 4,
+		FIGHT : 1,    //Player has selected to fight.
+		ACT : 2,      //Player has selected to act.
+        ITEM : 3,     //Player has selected to use an item.
+        MERCY : 4,    //Player has selected to offer mercy.
 	});
     
-    var selectState;
+    var selectState;  //Index of currently selected option in any menu.
     
-    var cmenu;
-    var cwriter;
-    var hpDisplay;
-    var bbox;
-    var soul;
-    var startPos;
-    var curHealth;
-    var maxHealth;
+    var cmenu;        //Menu button display object.
+    var cwriter;      //Text display object.
+    var hpDisplay;    //HP display object.
+    var bbox;         //Bullet-box object.
+    var soul;         //Player's soul object.
+    var startPos;     //Starting position 
+    var curHealth;    //Player current health.
+    var maxHealth;    //Player max health.
 	
 	//Init
 	function init()
@@ -90,6 +90,7 @@ app.combat = (function()
     //Update
 	function update(dt)
 	{
+        //States for the combat sequence.
         switch(combatState)
         {
             case COMBAT_STATE.MAIN:
@@ -182,6 +183,7 @@ app.combat = (function()
     //Draw
 	function draw(ctx)
 	{
+        //States for the combat sequence.
         switch(combatState)
         {
             case COMBAT_STATE.MAIN:
@@ -256,7 +258,6 @@ app.combat = (function()
 				hpDisplay.draw(ctx, curHealth, maxHealth);
                 cmenu.draw(ctx, menuState, MENU_STATE);
 				cwriter.drawOption(ctx, 0, MENU_STATE, selectState);
-				soul.draw(ctx);
                 break;
         }
 	}
