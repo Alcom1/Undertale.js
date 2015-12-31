@@ -31,10 +31,17 @@ app.sound = (function()
         }
         sound.play();
     }
+    
+    function pauseSound(id)
+    {
+        var sound = document.querySelector("#" + id);
+        sound.pause();        
+    }
 	
 	// export a public interface to this module (Why does this need to be same line bracket?)
 	return {
 		init : init,
-        playSound : playSound
+        playSound : playSound,
+        pauseSound : pauseSound
 	}
 }());

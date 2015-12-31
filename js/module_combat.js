@@ -141,6 +141,7 @@ app.combat = (function()
                     combatState = menuState == MENU_STATE.ITEM ? COMBAT_STATE.ITEM : COMBAT_STATE.NAME;
                     selectStateOther = 0;
                     app.main.sound.playSound("button", true);
+                    app.main.sound.pauseSound("text"); 
                 }
                 break;
             case COMBAT_STATE.FIGHT:

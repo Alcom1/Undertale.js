@@ -51,24 +51,30 @@ Cwriter.prototype.update = function(dt)
         this.charCounter++;
         
         //SFX
-        app.main.sound.playSound("text", false);
         
         //Change interval for new character.
         switch(this.text.charAt(this.charCounter))
         {
             case ".":
+                app.main.sound.pauseSound("text"); 
                 this.timeCheck = this.timePeriod;
                 break;
             case ",":
+                app.main.sound.pauseSound("text"); 
                 this.timeCheck = this.timeComma;
                 break;
             case "*":
                 this.timeCheck = this.timeAsterisk;
                 break;
             default:
+                app.main.sound.playSound("text", false); 
                 this.timeCheck = this.timeStandard;
                 break;
         }
+    }
+    else
+    {
+        app.main.sound.pauseSound("text"); 
     }
 }
 

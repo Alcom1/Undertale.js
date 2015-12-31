@@ -1,5 +1,4 @@
-//Combat sequence class with enemy dialogue, display, and attacks.
-//Combat features unique to each fight, essentially.
+//Combat sequence class
 var Csequence = function()
 {
     
