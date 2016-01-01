@@ -148,7 +148,7 @@ app.combat = (function()
                 }
                 break;
             case COMBAT_STATE.FIGHT:
-            	if(!cattack.update(dt))
+            	if(cattack.update(dt) == -1)
                 {
                     combatState = COMBAT_STATE.MAIN;
                     cwriter.reset();
@@ -200,7 +200,7 @@ app.combat = (function()
                     cwriter.reset();
                     app.main.sound.playSound("button", true);
                 }
-                if(combatState = COMBAT_STATE.FIGHT)
+                if(combatState == COMBAT_STATE.FIGHT)
                 {
                     cattack.setup();
                 }
