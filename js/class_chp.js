@@ -1,10 +1,10 @@
 //Combat hp display object
-var HPDisplay = function()
+var Chp = function()
 {
     this.hpText = document.getElementById("hp");
 }
 
-HPDisplay.prototype.draw = function(ctx, cur, max)
+Chp.prototype.draw = function(ctx, cur, max)
 {
     ctx.save();
     
