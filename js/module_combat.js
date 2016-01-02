@@ -39,12 +39,12 @@ app.combat = (function()
     var cmenu;        //Menu button display object.
     var cwriter;      //Text display object.
     var cattack;      //Attack display.
-    var chp;    //HP display object.
+    var chp;          //HP display object.
     var bbox;         //Bullet-box object.
     var soul;         //Player's soul object.
     var startPos;     //Starting position 
-    var curHealth;    //Player current health.
-    var maxHealth;    //Player max health.
+    var curHP;        //Player current health.
+    var maxHP;        //Player max health.
     
     //Options
     var texts;
@@ -81,8 +81,8 @@ app.combat = (function()
     //Initialize with provided canvas.
     function setup(
         ctx, 
-        _curHealth, 
-        _maxHealth,
+        _curHP, 
+        _maxHP,
         _texts,
         _names,
         _acts,
@@ -95,8 +95,8 @@ app.combat = (function()
         items = _items;
         mercies = _mercies;
 		soul.getCollision(ctx);   //Form collision data for player.
-        curHealth = _curHealth;
-        maxHealth = _maxHealth;
+        curHP = _curHP;
+        maxHP = _maxHP;
         
         
         cwriter = new Cwriter(
@@ -221,7 +221,7 @@ app.combat = (function()
         {
             case COMBAT_STATE.MAIN:
 				bbox.draw(ctx);
-				chp.draw(ctx, curHealth, maxHealth);
+				chp.draw(ctx, curHP, maxHP);
                 cmenu.draw(ctx, menuState, MENU_STATE);
                 cwriter.drawText(ctx);
                 switch(menuState)
@@ -242,34 +242,34 @@ app.combat = (function()
                 break;
             case COMBAT_STATE.FIGHT:
 				bbox.draw(ctx);
-				chp.draw(ctx, curHealth, maxHealth);
+				chp.draw(ctx, curHP, maxHP);
                 cmenu.draw(ctx, 0, MENU_STATE);
                 cattack.draw(ctx);
                 break;
             case COMBAT_STATE.ACT:
 				bbox.draw(ctx);
-				chp.draw(ctx, curHealth, maxHealth);
+				chp.draw(ctx, curHP, maxHP);
                 cmenu.draw(ctx, 0, MENU_STATE);
                 cwriter.drawMenu(ctx, acts[selectStateEnemy], menuState, MENU_STATE);
 				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 0));
                 break;
             case COMBAT_STATE.ITEM:
 				bbox.draw(ctx);
-				chp.draw(ctx, curHealth, maxHealth);
+				chp.draw(ctx, curHP, maxHP);
                 cmenu.draw(ctx, 0, MENU_STATE);
                 cwriter.drawMenu(ctx, items, menuState, MENU_STATE);
 				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 0));
                 break;
             case COMBAT_STATE.MERCY:
 				bbox.draw(ctx);
-				chp.draw(ctx, curHealth, maxHealth);
+				chp.draw(ctx, curHP, maxHP);
                 cmenu.draw(ctx, 0, MENU_STATE);
                 cwriter.drawMenu(ctx, mercies, menuState, MENU_STATE);
 				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 1));
                 break;
             case COMBAT_STATE.SURVIVE:
 				bbox.draw(ctx);
-				chp.draw(ctx, curHealth, maxHealth);
+				chp.draw(ctx, curHP, maxHP);
                 cmenu.draw(ctx, 0, MENU_STATE);
 				soul.checkCollision(ctx);
 				soul.draw(ctx);
@@ -282,7 +282,7 @@ app.combat = (function()
                 break;
             case COMBAT_STATE.NAME:
 				bbox.draw(ctx);
-				chp.draw(ctx, curHealth, maxHealth);
+				chp.draw(ctx, curHP, maxHP);
                 cmenu.draw(ctx, menuState, MENU_STATE);
 				cwriter.drawMenu(ctx, names, 0, MENU_STATE);
 				soul.drawAt(ctx, cwriter.getSoulPos(selectStateEnemy, 1));
