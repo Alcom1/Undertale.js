@@ -128,10 +128,11 @@ var Cwriter = (function()
             
             if(text.charAt(i + 1) == "|")
             {
+                textXPos += ctx.measureText(text.charAt(i)).width;
                 ctx.fillStyle = text.substring(i + 2, i + 6);
                 i += 5;
             }
-            if(text.charAt(i + 1) == "\n") //New line moveover.
+            else if(text.charAt(i + 1) == "\n") //New line moveover.
             {
                 textXPos = 70;
                 textYPos += 32;
