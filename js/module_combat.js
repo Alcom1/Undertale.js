@@ -172,7 +172,7 @@ app.combat = (function()
                     cwriter.reset();
                     app.main.sound.playSound("button", true);
                 }
-                selectStateOther = detectVerticalSelect(cgroup.mercies, selectStateOther);
+                selectStateOther = detectVerticalSelect(cgroup.getMercies(), selectStateOther);
                 break;
                 
             case COMBAT_STATE.SURVIVE:
@@ -267,7 +267,7 @@ app.combat = (function()
 				bbox.draw(ctx);
 				chp.draw(ctx, curHP, maxHP);
                 cmenu.draw(ctx, 0, MENU_STATE);
-                cwriter.drawMenu(ctx, cgroup.mercies, menuState, MENU_STATE);
+                cwriter.drawMenu(ctx, cgroup.getMercies(), menuState, MENU_STATE);
 				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 1));
                 break;
                 

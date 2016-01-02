@@ -48,10 +48,5 @@ Cgroup.prototype.getActs = function()
 
 Cgroup.prototype.getMercies = function()
 {
-    var mercies = [];
-    for(var i = 0; i < this.enemies.length; i++)
-    {
-        mercies.push(this.enemies[i].mercies);
-    }
-    return mercies;
+    return this.mercies;
 }
