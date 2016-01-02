@@ -89,15 +89,17 @@ app.combat = (function()
         
         cgroup = new Cgroup();
         
-        cwriter = new Cwriter(
+        cwriter = Cwriter;
+        cwriter.init();
+        cwriter.setTimes(
             .75,
             .33,
             .21,
             .033);
-        
         cwriter.setText(cgroup.getText());
         
-        cattack = new Cattack();
+        cattack = Cattack;
+        cattack.init();
         cattack.setup();
     }
     
