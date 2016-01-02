@@ -95,7 +95,10 @@ Cwriter.prototype.drawText = function(ctx)
     for(var i = 0; i < this.charCounter + 1; i++)
     { 
         //Display character if not last character and asterisk.
-        if(this.text.charAt(i) != "*" || i < this.charCounter)
+        if(
+            this.text.charAt(i) != "*" ||
+            this.text.charAt(i) != "|" ||
+            i < this.charCounter)
         {
             ctx.fillText(
                 this.text.charAt(i),
@@ -103,9 +106,14 @@ Cwriter.prototype.drawText = function(ctx)
                 textYPos + 2 * Math.floor(Math.random() * 1.0004));
         }
         
+        if(this.text.charAt(i + 1) == "|")
+        {
+            ctx.fillStyle = this.text.substring(i + 2, i + 6);
+            i += 5;
+        }
         if(this.text.charAt(i + 1) == "\n") //New line moveover.
         {
-            textXPos = 64;
+            textXPos = 70;
             textYPos += 32;
         }
         else if(this.text.charAt(i + 1) == "*")  //Asterisk moveover

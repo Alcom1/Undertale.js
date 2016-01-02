@@ -52,11 +52,7 @@ app.main =
             this.ctx, 
             20, 
             20,
-            ["* JavaScript is a high-level,  dynamic,  \nuntyped,  and interpreted programming \nlanguage.  -Wikipedia"],
-            ["Enemy", "Other Enemy"],
-            [["Check", "Beep", "Boop"], ["Check", "Pet", "Pet", "Pet", "Pet", "Pet"]],
-            ["Item A", "Item B", "Item C", "Item D"],
-            ["Mercy", "Flee"]);
+            ["Item A", "Item B", "Item C", "Item D"]);
 		
 		// start the game loop
 		this.frame();

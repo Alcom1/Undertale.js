@@ -2,6 +2,7 @@
 var Cgroup = function()
 {
     this.enemies = [new Cenemy(), new Cenemy()];
+    this.mercies = ["Mercy", "Flee"];
 }
 
 Cgroup.prototype.update = function(dt)
@@ -40,7 +41,7 @@ Cgroup.prototype.getActs = function()
     var acts = [];
     for(var i = 0; i < this.enemies.length; i++)
     {
-        acts.push(this.enemies[i].name);
+        acts.push(this.enemies[i].acts);
     }
     return acts;
 }
@@ -50,7 +51,7 @@ Cgroup.prototype.getMercies = function()
     var mercies = [];
     for(var i = 0; i < this.enemies.length; i++)
     {
-        mercies.push(this.enemies[i].name);
+        mercies.push(this.enemies[i].mercies);
     }
     return mercies;
 }
