@@ -13,6 +13,12 @@ var app = app || {};
 window.onload = function()
 {
 	console.log("window.onload called");
+    
+    //Non-central modules.
+    Cwriter.init();
+    Cattack.init();
+    Chp.init();
+    Cmenu.init();
 	
 	//Sound module
 	app.sound.init(0.4);

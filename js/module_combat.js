@@ -60,10 +60,10 @@ app.combat = (function()
         selectStateOther = 0;
         
         //Combat menu
-        cmenu = new Cmenu();
+        cmenu = Cmenu;
         
         //HP display
-        chp = new Chp();
+        chp = Chp;
         
         //Bullet box
         bbox = new Bbox(320, 320, 574, 140, 1);
@@ -90,7 +90,6 @@ app.combat = (function()
         cgroup = new Cgroup();
         
         cwriter = Cwriter;
-        cwriter.init();
         cwriter.setTimes(
             .75,
             .33,
@@ -99,7 +98,6 @@ app.combat = (function()
         cwriter.setText(cgroup.getText());
         
         cattack = Cattack;
-        cattack.init();
         cattack.setup();
     }
     
