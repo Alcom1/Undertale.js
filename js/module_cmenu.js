@@ -24,7 +24,7 @@ var Cmenu = (function()
         buttonMercyOver = document.getElementById("button_mercy_over");        
     }
 
-    function draw (ctx, menuState, selectState)
+    function draw(ctx, menuState, selectState)
     {
         ctx.save();
         

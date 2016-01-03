@@ -54,7 +54,7 @@ app.combat = (function()
 	function init()
 	{
         //Initial states for combat
-        combatState = COMBAT_STATE.MAIN;
+        combatState = COMBAT_STATE.SURVIVE;
         menuState = MENU_STATE.FIGHT;
         selectStateEnemy = 0;
         selectStateOther = 0;
@@ -70,9 +70,8 @@ app.combat = (function()
         
         //Soul
         startPos = new Vect(310, 309, 0);
-		var soulImage = document.getElementById("heart");
-		var soulImageDmg = document.getElementById("heart_dmg");
-		soul = new Soul(startPos, soulImage, soulImageDmg);
+		soul = Soul;
+        soul.setup(startPos);
 	}
     
     //Initialize with provided canvas.

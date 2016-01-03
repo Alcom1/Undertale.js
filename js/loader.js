@@ -15,6 +15,7 @@ window.onload = function()
 	console.log("window.onload called");
     
     //Non-central modules.
+    Soul.init();
     Cwriter.init();
     Cattack.init();
     Chp.init();
