@@ -3,6 +3,7 @@ var Cgroup = function()
 {
     this.enemies = [new Cenemy(), new Cenemy()];
     this.mercies = ["Mercy", "Flee"];
+    this.defends = [new Cdefend()];
 }
 
 Cgroup.prototype.update = function(dt)
@@ -19,6 +20,11 @@ Cgroup.prototype.draw = function(ctx)
     {
         this.enemies.draw(ctx);
     }   
+}
+
+Cgroup.prototype.getDefends = function()
+{
+    return this.defends[0];
 }
 
 Cgroup.prototype.getNames = function()

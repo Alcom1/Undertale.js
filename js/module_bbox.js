@@ -10,7 +10,7 @@ var Bbox = (function()
     
     function init()
     {
-        
+        console.log(this);
     }
     
     function setup(_pos, _width, _height)
@@ -18,7 +18,7 @@ var Bbox = (function()
         pos = _pos;
         width = _width;			//Width of box
         height = _height;		//Height of box
-        speed = 200;			//Speed at which box grows and shrinks.
+        speed = 600;			//Speed at which box grows and shrinks.
         newWidth = _width;		//Width of box to transition to
         newHeight = _height;	//Height of box to transition to       
     }
@@ -50,6 +50,8 @@ var Bbox = (function()
         {
             height = newHeight;
         }
+        
+        return width == newWidth && height == newHeight;
     }
     
     //Draw bullet box
@@ -86,12 +88,28 @@ var Bbox = (function()
             pos.y + height / 2 - 5];
     }
     
+    //Sets the width and height of the Bbox
+    function setSize(_newWidth, _newHeight, force)
+    {
+        if(force)
+        {
+            width = _newWidth;
+            height = _newHeight;
+        }
+        else
+        {
+            newWidth = _newWidth;
+            newHeight = _newHeight;
+        }
+    }
+    
     return{
         init : init,
         setup : setup,
         update : update,
         draw : draw,
         getBound : getBound,
+        setSize : setSize,
     }
 }());
 

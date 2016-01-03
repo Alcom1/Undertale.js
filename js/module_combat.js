@@ -11,10 +11,11 @@ var Combat = (function()
 		ACT : 2,      //State where the player selects an action.
         ITEM : 3,     //State where the player selects an item.
         MERCY : 4,    //State where the player offers mercy or flees.
-        SURVIVE : 5,  //State where the player defends themself.
-        FLASH : 6,    //State where the player's flash animation occurs, before the combat sequence begins.
-        DEATH : 7,    //State where the player's death animation occurs, after death.
-        NAME : 8      //State where the player selects an enemy by name.
+        RESPOND: 5,   //State where the player gets responded to by the enemy group.  
+        DEFEND : 6,   //State where the player defends themself.
+        FLASH : 7,    //State where the player's flash animation occurs, before the combat sequence begins.
+        DEATH : 8,    //State where the player's death animation occurs, after death.
+        NAME : 9      //State where the player selects an enemy by name.
 	});
     
 	var menuState;
@@ -30,12 +31,6 @@ var Combat = (function()
     var selectStateOther;  //Index of currently selected anything else.
     
     var cgroup;       //Group of attacking enemies! D:
-    var cmenu;        //Menu button display object.
-    var cwriter;      //Text display object.
-    var cattack;      //Attack display.
-    var chp;          //HP display object.
-    var bbox;         //Bullet-box object.
-    var soul;         //Player's soul object.
     var startPos;     //Starting position 
     var curHP;        //Player current health.
     var maxHP;        //Player max health.
@@ -52,20 +47,12 @@ var Combat = (function()
         selectStateEnemy = 0;
         selectStateOther = 0;
         
-        //Combat menu
-        cmenu = Cmenu;
-        
-        //HP display
-        chp = Chp;
-        
         //Bullet box
-        bbox = Bbox;
-        bbox.setup(new Vect(320, 320, 0), 574, 140);
+        Bbox.setup(new Vect(320, 320, 0), 574, 140);
         
         //Soul
         startPos = new Vect(310, 309, 0);
-		soul = Soul;
-        soul.setup(startPos);
+        Soul.setup(startPos);
 	}
     
     //Initialize with provided canvas.
@@ -76,22 +63,20 @@ var Combat = (function()
         _items)
     {
         items = _items;
-		soul.getCollision(ctx);   //Form collision data for player.
+		Soul.getCollision(ctx);   //Form collision data for player.
         curHP = _curHP;
         maxHP = _maxHP;
         
         cgroup = new Cgroup();
         
-        cwriter = Cwriter;
-        cwriter.setTimes(
+        Cwriter.setTimes(
             .75,
             .33,
             .21,
             .033);
-        cwriter.setText(cgroup.getText());
+        Cwriter.setText(cgroup.getText());
         
-        cattack = Cattack;
-        cattack.setup();
+        Cattack.setup();
     }
     
     //Update
@@ -101,41 +86,47 @@ var Combat = (function()
         switch(combatState)
         {
             case COMBAT_STATE.MAIN:
-                cwriter.update(dt);
-            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_RIGHT])
+                if(Bbox.update(dt))
                 {
-                    menuState++;
-                    if(menuState > MENU_STATE.MERCY)
-                        menuState = MENU_STATE.MERCY;
-                    else
+                    Cwriter.update(dt);
+                    
+                    if(myKeys.keydown[myKeys.KEYBOARD.KEY_RIGHT])
+                    {
+                        menuState++;
+                        if(menuState > MENU_STATE.MERCY)
+                            menuState = MENU_STATE.MERCY;
+                        else
+                            Sound.playSound("button", true);
+                    }
+                    if(myKeys.keydown[myKeys.KEYBOARD.KEY_LEFT])
+                    {
+                        menuState--;
+                        if(menuState < MENU_STATE.FIGHT)
+                            menuState = MENU_STATE.FIGHT;
+                        else
+                            Sound.playSound("button", true);
+                    }
+                    if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
+                    {
+                        Cwriter.skip();
+                    }
+                    if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
+                    {
+                        combatState = menuState == MENU_STATE.ITEM || menuState == MENU_STATE.MERCY ? menuState : COMBAT_STATE.NAME;
+                        selectStateOther = 0;
                         Sound.playSound("button", true);
-                }
-            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_LEFT])
-                {
-                    menuState--;
-                    if(menuState < MENU_STATE.FIGHT)
-                        menuState = MENU_STATE.FIGHT;
-                    else
-                        Sound.playSound("button", true);
-                }
-            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
-                {
-                    cwriter.skip();
-                }
-            	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
-                {
-                    combatState = menuState == MENU_STATE.ITEM || menuState == MENU_STATE.MERCY ? menuState : COMBAT_STATE.NAME;
-                    selectStateOther = 0;
-                    Sound.playSound("button", true);
-                    Sound.pauseSound("text"); 
+                        Sound.pauseSound("text"); 
+                    }
                 }
                 break;
                 
             case COMBAT_STATE.FIGHT:
-            	if(cattack.update(dt) == -1)
+            	if(Cattack.update(dt) == -1)
                 {
-                    combatState = COMBAT_STATE.MAIN;
-                    cwriter.reset();
+                    combatState = COMBAT_STATE.RESPOND;
+                    Bbox.setSize(cgroup.getDefends().width, cgroup.getDefends().height, false);
+                    cgroup.getDefends().setup();
+                    Cwriter.reset();
                 }
                 break;
                 
@@ -152,7 +143,7 @@ var Combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.MAIN;
-                    cwriter.reset();
+                    Cwriter.reset();
                     Sound.playSound("button", true);
                 }
                 selectStateOther = detectHorizontalSelect(items, selectStateOther);
@@ -162,15 +153,27 @@ var Combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.MAIN;
-                    cwriter.reset();
+                    Cwriter.reset();
                     Sound.playSound("button", true);
                 }
                 selectStateOther = detectVerticalSelect(cgroup.getMercies(), selectStateOther);
                 break;
                 
-            case COMBAT_STATE.SURVIVE:
-				soul.move(dt);
-				soul.limit(bbox.getBound());
+            case COMBAT_STATE.RESPOND:
+                if(Bbox.update(dt))
+                {
+                    combatState = COMBAT_STATE.DEFEND;
+                }
+                break;
+                
+            case COMBAT_STATE.DEFEND:
+				Soul.move(dt);
+				Soul.limit(Bbox.getBound());
+                if(cgroup.getDefends().update(dt))
+                {
+                    Bbox.setSize(574, 140, false);
+                    combatState = COMBAT_STATE.MAIN;
+                }
                 break;
                 
             case COMBAT_STATE.FLASH:
@@ -188,19 +191,19 @@ var Combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.MAIN;
-                    cwriter.reset();
+                    Cwriter.reset();
                     Sound.playSound("button", true);
                 }
                 if(combatState == COMBAT_STATE.FIGHT)
                 {
-                    cattack.setup();
+                    Cattack.setup();
                 }
                 selectStateEnemy = detectVerticalSelect(cgroup.getNames(), selectStateEnemy);
                 break;
         }
         
         //Tapping mode.
-        if(combatState != COMBAT_STATE.SURVIVE)
+        if(combatState != COMBAT_STATE.DEFEND)
             myKeys.keydown = [];
 	}
     
@@ -211,83 +214,96 @@ var Combat = (function()
         switch(combatState)
         {
             case COMBAT_STATE.MAIN:
-				bbox.draw(ctx);
-				chp.draw(ctx, curHP, maxHP);
-                cmenu.draw(ctx, menuState, MENU_STATE);
-                cwriter.drawText(ctx);
+				Bbox.draw(ctx);
+				Chp.draw(ctx, curHP, maxHP);
+                Cmenu.draw(ctx, menuState, MENU_STATE);
+                Cwriter.drawText(ctx);
                 switch(menuState)
                 {
                     case MENU_STATE.FIGHT:
-				        soul.drawAt(ctx, new Vect(40, 446, 0));
+				        Soul.drawAt(ctx, new Vect(40, 446, 0));
                         break;
                     case MENU_STATE.ACT:
-				        soul.drawAt(ctx, new Vect(193, 446, 0));
+				        Soul.drawAt(ctx, new Vect(193, 446, 0));
                         break;
                     case MENU_STATE.ITEM:
-				        soul.drawAt(ctx, new Vect(353, 446, 0));
+				        Soul.drawAt(ctx, new Vect(353, 446, 0));
                         break;
                     case MENU_STATE.MERCY:
-				        soul.drawAt(ctx, new Vect(508, 446, 0));
+				        Soul.drawAt(ctx, new Vect(508, 446, 0));
                         break;
                 }
                 break;
                 
             case COMBAT_STATE.FIGHT:
-				bbox.draw(ctx);
-				chp.draw(ctx, curHP, maxHP);
-                cmenu.draw(ctx, 0, MENU_STATE);
-                cattack.draw(ctx);
+				Bbox.draw(ctx);
+				Chp.draw(ctx, curHP, maxHP);
+                Cmenu.draw(ctx, 0, MENU_STATE);
+                Cattack.draw(ctx);
                 break;
                 
             case COMBAT_STATE.ACT:
-				bbox.draw(ctx);
-				chp.draw(ctx, curHP, maxHP);
-                cmenu.draw(ctx, 0, MENU_STATE);
-                cwriter.drawMenu(ctx, cgroup.getActs()[selectStateEnemy], menuState, MENU_STATE);
-				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 0));
+				Bbox.draw(ctx);
+				Chp.draw(ctx, curHP, maxHP);
+                Cmenu.draw(ctx, 0, MENU_STATE);
+                Cwriter.drawMenu(ctx, cgroup.getActs()[selectStateEnemy], menuState, MENU_STATE);
+				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateOther, 0));
                 break;
                 
             case COMBAT_STATE.ITEM:
-				bbox.draw(ctx);
-				chp.draw(ctx, curHP, maxHP);
-                cmenu.draw(ctx, 0, MENU_STATE);
-                cwriter.drawMenu(ctx, items, menuState, MENU_STATE);
-				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 0));
+				Bbox.draw(ctx);
+				Chp.draw(ctx, curHP, maxHP);
+                Cmenu.draw(ctx, 0, MENU_STATE);
+                Cwriter.drawMenu(ctx, items, menuState, MENU_STATE);
+				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateOther, 0));
                 break;
                 
             case COMBAT_STATE.MERCY:
-				bbox.draw(ctx);
-				chp.draw(ctx, curHP, maxHP);
-                cmenu.draw(ctx, 0, MENU_STATE);
-                cwriter.drawMenu(ctx, cgroup.getMercies(), menuState, MENU_STATE);
-				soul.drawAt(ctx, cwriter.getSoulPos(selectStateOther, 1));
+				Bbox.draw(ctx);
+				Chp.draw(ctx, curHP, maxHP);
+                Cmenu.draw(ctx, 0, MENU_STATE);
+                Cwriter.drawMenu(ctx, cgroup.getMercies(), menuState, MENU_STATE);
+				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateOther, 1));
                 break;
                 
-            case COMBAT_STATE.SURVIVE:
-				bbox.draw(ctx);
-				chp.draw(ctx, curHP, maxHP);
-                cmenu.draw(ctx, 0, MENU_STATE);
-				soul.checkCollision(ctx);
-				soul.draw(ctx);
+            case COMBAT_STATE.RESPOND:
+				Bbox.draw(ctx);
+				Chp.draw(ctx, curHP, maxHP);
+                Cmenu.draw(ctx, 0, MENU_STATE);
+				Soul.draw(ctx);
+                break;
+                
+            case COMBAT_STATE.DEFEND:
+				Bbox.draw(ctx);
+				Chp.draw(ctx, curHP, maxHP);
+                Cmenu.draw(ctx, 0, MENU_STATE);
+				Soul.checkCollision(ctx);
+				Soul.draw(ctx);
                 break;
                 
             case COMBAT_STATE.FLASH:
-				soul.draw(ctx);
+				Soul.draw(ctx);
                 break;
                 
             case COMBAT_STATE.DEATH:
-				soul.draw(ctx);
+				Soul.draw(ctx);
                 break;
                 
             case COMBAT_STATE.NAME:
-				bbox.draw(ctx);
-				chp.draw(ctx, curHP, maxHP);
-                cmenu.draw(ctx, menuState, MENU_STATE);
-				cwriter.drawMenu(ctx, cgroup.getNames(), 0, MENU_STATE);
-				soul.drawAt(ctx, cwriter.getSoulPos(selectStateEnemy, 1));
+				Bbox.draw(ctx);
+				Chp.draw(ctx, curHP, maxHP);
+                Cmenu.draw(ctx, menuState, MENU_STATE);
+				Cwriter.drawMenu(ctx, cgroup.getNames(), 0, MENU_STATE);
+				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateEnemy, 1));
                 break;
         }
 	}
+    
+    //Return the state/index of the enemy selector
+    function getSelectStateEnemy()
+    {
+        return selectStateEnemy;
+    }
     
     //Detect a selection change in a horizontally-positioned menu and change the selection.
     function detectHorizontalSelect(options, state)
@@ -357,5 +373,6 @@ var Combat = (function()
         setup : setup,
         update : update,
         draw : draw,
+        getSelectStateEnemy : getSelectStateEnemy,
 	}
 }());

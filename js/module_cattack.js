@@ -1,8 +1,9 @@
 // Combat attack module.
 var Cattack = (function()
 {
-    var attackBox;
+    var attackBox;      //Display for attack.
     
+    var attackState;    //State of the attack.
     var ATTACK_STATE = Object.freeze(
     {
         HIT : 0,
@@ -11,9 +12,10 @@ var Cattack = (function()
     
     var attackBars;
     var attackFades;
-    var attackState;
     var attackBoxOpacity;
     var totalDamage;
+    var damageDelayCounter;
+    var damageDelay;
     
     function init()
     {
@@ -27,7 +29,9 @@ var Cattack = (function()
         attackFades = [];
         attackState = ATTACK_STATE.HIT;
         attackBoxOpacity = 1;
-        totalDamage = 0;        
+        totalDamage = 0;       
+        damageDelayCounter = 0;
+        damageDelay = 1;
     }
     
     function update(dt)
@@ -79,9 +83,13 @@ var Cattack = (function()
                 break;
             case ATTACK_STATE.DAMAGE:
                 attackBoxOpacity -= 2 * dt;
+                damageDelayCounter += dt;
                 if(attackBoxOpacity < 0)
                 {
                     attackBoxOpacity = 0;
+                }
+                if(damageDelayCounter > damageDelay)
+                {
                     return -1;
                 }
                 break;
@@ -147,7 +155,7 @@ var Cattack = (function()
                 case 0:
                     ctx.fillStyle = "#0FF";                 
                     break;
-            case 1:
+                case 1:
                     if(Math.floor(attackFades[i][2] * 6) % 2)
                         ctx.fillStyle = "#F80";
                     else
