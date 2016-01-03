@@ -1,12 +1,5 @@
 // Combat module
-"use strict";
-
-// if app exists use the existing copy
-// else create a new object literal
-var app = app || {};
-
-// define the .combat module and immediately invoke it in an IIFE
-app.combat = (function()
+var Combat = (function()
 {
 	console.log("combat.js module loaded");
     
@@ -54,7 +47,7 @@ app.combat = (function()
 	function init()
 	{
         //Initial states for combat
-        combatState = COMBAT_STATE.SURVIVE;
+        combatState = COMBAT_STATE.MAIN;
         menuState = MENU_STATE.FIGHT;
         selectStateEnemy = 0;
         selectStateOther = 0;
@@ -115,7 +108,7 @@ app.combat = (function()
                     if(menuState > MENU_STATE.MERCY)
                         menuState = MENU_STATE.MERCY;
                     else
-                        app.main.sound.playSound("button", true);
+                        Sound.playSound("button", true);
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_LEFT])
                 {
@@ -123,7 +116,7 @@ app.combat = (function()
                     if(menuState < MENU_STATE.FIGHT)
                         menuState = MENU_STATE.FIGHT;
                     else
-                        app.main.sound.playSound("button", true);
+                        Sound.playSound("button", true);
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
@@ -133,8 +126,8 @@ app.combat = (function()
                 {
                     combatState = menuState == MENU_STATE.ITEM || menuState == MENU_STATE.MERCY ? menuState : COMBAT_STATE.NAME;
                     selectStateOther = 0;
-                    app.main.sound.playSound("button", true);
-                    app.main.sound.pauseSound("text"); 
+                    Sound.playSound("button", true);
+                    Sound.pauseSound("text"); 
                 }
                 break;
                 
@@ -150,7 +143,7 @@ app.combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.NAME;
-                    app.main.sound.playSound("button", true);
+                    Sound.playSound("button", true);
                 }
                 selectStateOther = detectHorizontalSelect(cgroup.getActs()[selectStateEnemy], selectStateOther);
                 break;
@@ -160,7 +153,7 @@ app.combat = (function()
                 {
                     combatState = COMBAT_STATE.MAIN;
                     cwriter.reset();
-                    app.main.sound.playSound("button", true);
+                    Sound.playSound("button", true);
                 }
                 selectStateOther = detectHorizontalSelect(items, selectStateOther);
                 break;
@@ -170,7 +163,7 @@ app.combat = (function()
                 {
                     combatState = COMBAT_STATE.MAIN;
                     cwriter.reset();
-                    app.main.sound.playSound("button", true);
+                    Sound.playSound("button", true);
                 }
                 selectStateOther = detectVerticalSelect(cgroup.getMercies(), selectStateOther);
                 break;
@@ -190,13 +183,13 @@ app.combat = (function()
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = menuState;
-                    app.main.sound.playSound("button", true);
+                    Sound.playSound("button", true);
                 }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.MAIN;
                     cwriter.reset();
-                    app.main.sound.playSound("button", true);
+                    Sound.playSound("button", true);
                 }
                 if(combatState == COMBAT_STATE.FIGHT)
                 {
@@ -304,7 +297,7 @@ app.combat = (function()
             if(state % 2)
             {
                 state--;
-                app.main.sound.playSound("button", true);
+                Sound.playSound("button", true);
             }
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_RIGHT])
@@ -312,7 +305,7 @@ app.combat = (function()
             if((state + 1) % 2 && state < options.length - 1)
             {
                 state++;
-                app.main.sound.playSound("button", true);
+                Sound.playSound("button", true);
             }
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_UP])
@@ -320,7 +313,7 @@ app.combat = (function()
             if(state > 1)
             {
                 state -= 2;
-                app.main.sound.playSound("button", true);
+                Sound.playSound("button", true);
             }
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_DOWN])
@@ -328,7 +321,7 @@ app.combat = (function()
             if(state < options.length - 2)
             {
                 state += 2;
-                app.main.sound.playSound("button", true);
+                Sound.playSound("button", true);
             }
         }
         
@@ -343,7 +336,7 @@ app.combat = (function()
             if(state > 0)
             {
                 state --;
-                app.main.sound.playSound("button", true);
+                Sound.playSound("button", true);
             }
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_DOWN])
@@ -351,7 +344,7 @@ app.combat = (function()
             if(state < options.length - 1)
             {
                 state ++;
-                app.main.sound.playSound("button", true);
+                Sound.playSound("button", true);
             }
         }
         

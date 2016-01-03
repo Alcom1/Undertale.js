@@ -14,24 +14,18 @@ window.onload = function()
 {
 	console.log("window.onload called");
     
-    //Non-central modules.
+    //Non-main modules.
     Soul.init();
     Bbox.init();
     Cwriter.init();
     Cattack.init();
     Chp.init();
     Cmenu.init();
-	
-	//Sound module
-	app.sound.init(0.4);
-	app.main.sound = app.sound;
-    
-	//Combat module
-	app.combat.init();
-	app.main.combat = app.combat;
+	Sound.init(0.4);
+	Combat.init();
 	
 	//Main module
-	app.main.init();
+	main.init();
 }
 	
 window.onblur = function()

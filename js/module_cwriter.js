@@ -76,25 +76,25 @@ var Cwriter = (function()
             switch(text.charAt(charCounter))
             {
                 case ".":
-                    app.main.sound.pauseSound("text"); 
+                    Sound.pauseSound("text"); 
                     timeCheck = timePeriod;
                     break;
                 case ",":
-                    app.main.sound.pauseSound("text"); 
+                    Sound.pauseSound("text"); 
                     timeCheck = timeComma;
                     break;
                 case "*":
                     timeCheck = timeAsterisk;
                     break;
                 default:
-                    app.main.sound.playSound("text", false); 
+                    Sound.playSound("text", false); 
                     timeCheck = timeStandard;
                     break;
             }
         }
         else
         {
-            app.main.sound.pauseSound("text"); 
+            Sound.pauseSound("text"); 
         }        
     }
     

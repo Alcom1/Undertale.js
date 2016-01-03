@@ -1,13 +1,9 @@
 // main.js
 "use strict";
 
-// if app exists use the existing copy
-// else create a new object literal
-var app = app || {};
-
 // .main is an object literal that is a property of the app global
 // This object literal has its own properties and methods (functions)
-app.main =
+var main =
 {
     WIDTH : 640, 				// Canvas width
     HEIGHT : 480,				// Canvas height
@@ -17,10 +13,6 @@ app.main =
     debug : true,				// debug
 	reset : true,
 	animationID : 0,			//ID index of the current frame.
-	
-	//Modules
-    combat : undefined,         //Combat
-	sound : undefined,			//Sound
 	
 	//Game state enum
 	gameState : undefined,
@@ -48,7 +40,7 @@ app.main =
         this.gameState = this.GAME_STATE.COMBAT;
         
         //Setup combat module.
-        this.combat.setup(
+        Combat.setup(
             this.ctx, 
             20, 
             20,
@@ -99,7 +91,7 @@ app.main =
         switch(this.gameState)
         {
             case this.GAME_STATE.COMBAT:
-                this.combat.update(dt);
+                Combat.update(dt);
                 break;
         }
 	},
@@ -110,7 +102,7 @@ app.main =
         switch(this.gameState)
         {
             case this.GAME_STATE.COMBAT:
-                this.combat.draw(ctx);
+                Combat.draw(ctx);
                 break;
         }
         

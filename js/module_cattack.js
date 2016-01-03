@@ -55,16 +55,16 @@ var Cattack = (function()
                     if(attackBars.length > 0)
                     {
                         if(damage < 280)
-                            app.main.sound.playSound("hit_1", true);
+                            Sound.playSound("hit_1", true);
                         else
-                            app.main.sound.playSound("hit_1_crit", true);
+                            Sound.playSound("hit_1_crit", true);
                     }
                     else
                     {
                         if(totalDamage < 1200)
-                            app.main.sound.playSound("hit_2", true);
+                            Sound.playSound("hit_2", true);
                         else
-                            app.main.sound.playSound("hit_2_crit", true);
+                            Sound.playSound("hit_2_crit", true);
                     }
                 }
                 if(attackBars.length < 1 || attackBars[attackBars.length - 1] > 640)
