@@ -16,6 +16,7 @@ window.onload = function()
     
     //Non-central modules.
     Soul.init();
+    Bbox.init();
     Cwriter.init();
     Cattack.init();
     Chp.init();

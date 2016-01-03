@@ -66,7 +66,8 @@ app.combat = (function()
         chp = Chp;
         
         //Bullet box
-        bbox = new Bbox(320, 320, 574, 140, 1);
+        bbox = Bbox;
+        bbox.setup(new Vect(320, 320, 0), 574, 140);
         
         //Soul
         startPos = new Vect(310, 309, 0);
@@ -175,7 +176,6 @@ app.combat = (function()
                 break;
                 
             case COMBAT_STATE.SURVIVE:
-				bbox.transition(dt);
 				soul.move(dt);
 				soul.limit(bbox.getBound());
                 break;

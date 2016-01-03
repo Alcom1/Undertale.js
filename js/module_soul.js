@@ -1,3 +1,4 @@
+//Player soul module
 var Soul = (function()
 {
     var pos;            //Position (top-left corner)
