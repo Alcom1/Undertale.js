@@ -43,8 +43,7 @@ var main =
         Combat.setup(
             this.ctx, 
             20, 
-            20,
-            ["Item A", "Item B", "Item C", "Item D"]);
+            20);
 		
 		// start the game loop
 		this.frame();

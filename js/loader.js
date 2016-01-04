@@ -15,6 +15,7 @@ window.onload = function()
 	console.log("window.onload called");
     
     //Non-main modules.
+    Inventory.init();
     Soul.init();
     Bbox.init();
     Cwriter.init();

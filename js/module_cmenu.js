@@ -1,4 +1,4 @@
-//Combat Menu Object
+//Combat Menu Module
 var Cmenu = (function()
 {
     var buttonFight;

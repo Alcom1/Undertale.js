@@ -11,11 +11,12 @@ var Combat = (function()
 		ACT : 2,      //State where the player selects an action.
         ITEM : 3,     //State where the player selects an item.
         MERCY : 4,    //State where the player offers mercy or flees.
-        RESPOND: 5,   //State where the player gets responded to by the enemy group.  
-        DEFEND : 6,   //State where the player defends themself.
-        FLASH : 7,    //State where the player's flash animation occurs, before the combat sequence begins.
-        DEATH : 8,    //State where the player's death animation occurs, after death.
-        NAME : 9      //State where the player selects an enemy by name.
+        EFFECT : 5,   //State where the player gets to see the impact of their decisive actions.
+        RESPOND: 6,   //State where the player gets responded to by the enemy group.  
+        DEFEND : 7,   //State where the player defends themself.
+        FLASH : 8,    //State where the player's flash animation occurs, before the combat sequence begins.
+        DEATH : 9,    //State where the player's death animation occurs, after death.
+        NAME : 10     //State where the player selects an enemy by name.
 	});
     
 	var menuState;
@@ -34,9 +35,6 @@ var Combat = (function()
     var startPos;     //Starting position 
     var curHP;        //Player current health.
     var maxHP;        //Player max health.
-    
-    //Options
-    var items;
 	
 	//Init
 	function init()
@@ -59,10 +57,8 @@ var Combat = (function()
     function setup(
         ctx, 
         _curHP, 
-        _maxHP,
-        _items)
+        _maxHP)
     {
-        items = _items;
 		Soul.getCollision(ctx);   //Form collision data for player.
         curHP = _curHP;
         maxHP = _maxHP;
@@ -106,10 +102,6 @@ var Combat = (function()
                         else
                             Sound.playSound("button", true);
                     }
-                    if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
-                    {
-                        Cwriter.skip();
-                    }
                     if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                     {
                         combatState = menuState == MENU_STATE.ITEM || menuState == MENU_STATE.MERCY ? menuState : COMBAT_STATE.NAME;
@@ -140,13 +132,19 @@ var Combat = (function()
                 break;
                 
             case COMBAT_STATE.ITEM:
+                if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
+                {
+                    Cwriter.setText(Inventory.getText(selectStateOther));
+                    Inventory.removeItem(selectStateOther);
+                    combatState = COMBAT_STATE.EFFECT;   
+                }
             	if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
                 {
                     combatState = COMBAT_STATE.MAIN;
                     Cwriter.reset();
                     Sound.playSound("button", true);
                 }
-                selectStateOther = detectHorizontalSelect(items, selectStateOther);
+                selectStateOther = detectHorizontalSelect(Inventory.getNames(), selectStateOther);
                 break;
                 
             case COMBAT_STATE.MERCY:
@@ -158,7 +156,18 @@ var Combat = (function()
                 }
                 selectStateOther = detectVerticalSelect(cgroup.getMercies(), selectStateOther);
                 break;
-                
+            
+            case COMBAT_STATE.EFFECT:
+                Cwriter.update(dt);
+                if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
+                {
+                    combatState = COMBAT_STATE.RESPOND;
+                    Bbox.setSize(cgroup.getDefends().width, cgroup.getDefends().height, false);
+                    cgroup.getDefends().setup();
+                    Cwriter.setText(cgroup.getText());
+                }
+                break;
+            
             case COMBAT_STATE.RESPOND:
                 if(Bbox.update(dt))
                 {
@@ -254,7 +263,7 @@ var Combat = (function()
 				Bbox.draw(ctx);
 				Chp.draw(ctx, curHP, maxHP);
                 Cmenu.draw(ctx, 0, MENU_STATE);
-                Cwriter.drawMenu(ctx, items, menuState, MENU_STATE);
+                Cwriter.drawMenu(ctx, Inventory.getNames(), menuState, MENU_STATE);
 				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateOther, 0));
                 break;
                 
@@ -264,6 +273,13 @@ var Combat = (function()
                 Cmenu.draw(ctx, 0, MENU_STATE);
                 Cwriter.drawMenu(ctx, cgroup.getMercies(), menuState, MENU_STATE);
 				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateOther, 1));
+                break;
+            
+            case COMBAT_STATE.EFFECT:
+				Bbox.draw(ctx);
+				Chp.draw(ctx, curHP, maxHP);
+                Cmenu.draw(ctx, menuState, MENU_STATE);
+                Cwriter.drawText(ctx);
                 break;
                 
             case COMBAT_STATE.RESPOND:

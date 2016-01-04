@@ -60,6 +60,11 @@ var Cwriter = (function()
     //Update the writer.
     function update(dt)
     {
+        if(myKeys.keydown[myKeys.KEYBOARD.KEY_X])
+        {
+            skip();
+        }
+        
         //Tick.
         timeCounter += dt;
         
