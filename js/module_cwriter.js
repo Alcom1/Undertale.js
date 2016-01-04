@@ -53,8 +53,8 @@ var Cwriter = (function()
     function setText(_text)
     {
         text = _text;
-        charCounter = 0;       //Counter for the index of the most recent displayed character.
-        timeCounter = 0;       //Counter for the time since a character was placed.        
+        charCounter = -1;           //Counter for the index of the most recent displayed character.
+        timeCounter = timeAsterisk; //Counter for the time since a character was placed.        
     }
     
     //Update the writer.
@@ -220,8 +220,8 @@ var Cwriter = (function()
     //Reset text
     function reset()
     {
-        charCounter = 0;
-        timeCounter = 0;  
+        charCounter = -1;
+        timeCounter = timeAsterisk;  
     }
 
     //Get the soul position for the option at a given menu index and style
