@@ -18,5 +18,27 @@ Cdefend.prototype.update = function(dt)
 
 Cdefend.prototype.draw = function(ctx)
 {
-    
+    ctx.save();
+    ctx.lineWidth = 3;
+    ctx.fillStyle = "#FFF";
+    ctx.strokeStyle = "#000";
+    ctx.beginPath();
+    ctx.rect(
+        150 + 75 * this.durationCounter,
+        265,
+        40,
+        40);
+    ctx.rect(
+        100 + 75 * this.durationCounter,
+        305,
+        40,
+        40);
+    ctx.rect(
+        200 + 75 * this.durationCounter,
+        345,
+        40,
+        40);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore(); 
 }

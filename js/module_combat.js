@@ -277,6 +277,7 @@ var Combat = (function()
 				Bbox.draw(ctx);
 				Chp.draw(ctx, curHP, maxHP);
                 Cmenu.draw(ctx, 0, MENU_STATE);
+                cgroup.getDefends().draw(ctx);
 				Soul.checkCollision(ctx);
 				Soul.draw(ctx);
                 break;
