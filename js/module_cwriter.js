@@ -81,11 +81,11 @@ var Cwriter = (function()
             switch(text.charAt(charCounter))
             {
                 case ".":
-                    Sound.pauseSound("text"); 
+                    Sound.pauseSound("text", 70); 
                     timeCheck = timePeriod;
                     break;
                 case ",":
-                    Sound.pauseSound("text"); 
+                    Sound.pauseSound("text", 70); 
                     timeCheck = timeComma;
                     break;
                 case "*":
@@ -98,9 +98,9 @@ var Cwriter = (function()
             }
         }
         
-        if(charCounter >= text.length)
+        if(charCounter >= text.length - 1)
         {
-            Sound.pauseSound("text"); 
+            Sound.pauseSoundHard("text"); 
         }        
     }
     

@@ -214,6 +214,9 @@ var Combat = (function()
                 break;
         }
         
+        //Sound updates
+        Sound.update();
+        
         //Tapping mode.
         if(combatState != COMBAT_STATE.DEFEND)
             myKeys.keydown = [];
@@ -281,7 +284,7 @@ var Combat = (function()
             case COMBAT_STATE.EFFECT:
 				Bbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
-                Cmenu.draw(ctx, menuState, MENU_STATE);
+                Cmenu.draw(ctx, 0, MENU_STATE);
                 Cwriter.drawText(ctx);
                 break;
                 

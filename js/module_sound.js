@@ -2,6 +2,7 @@
 var Sound = (function()
 {
 	console.log("sound.js module loaded");
+    var pauser;
 	
 	//Init
 	function init(volume)
@@ -14,6 +15,19 @@ var Sound = (function()
         }
 	}
     
+    function update()
+    {
+        if(pauser != undefined)
+        {
+            var sound = document.querySelector("#" + pauser[0]);
+            if(Math.floor(sound.currentTime * 1000) % pauser[1] > 50)
+            {
+                sound.pause();
+                pauser = undefined;
+            }
+        }
+    }
+    
     function playSound(id, disrupt)
     {
         var sound = document.querySelector("#" + id);
@@ -23,18 +37,27 @@ var Sound = (function()
             sound.currentTime = 0;
         }
         sound.play();
+        pauser = undefined;
     }
     
-    function pauseSound(id)
+    function pauseSound(id, step)
     {
-        var sound = document.querySelector("#" + id);
-        sound.pause();        
+        step = 70;
+        pauser = [id, step];
+    }
+    
+    function pauseSoundHard(id)
+    {
+        document.querySelector("#" + id).pause();
+        pauser = undefined;
     }
 	
 	// export a public interface to this module (Why does this need to be same line bracket?)
 	return {
 		init : init,
+        update : update,
         playSound : playSound,
-        pauseSound : pauseSound
+        pauseSound : pauseSound,
+        pauseSoundHard : pauseSoundHard,
 	}
 }());
