@@ -7,9 +7,10 @@ var Inventory = (function()
     {
         items = 
         [
-            new ItemHealing("Food.js", "* Test item sentence. 10 health restored.", 10),
-            new ItemHealing("Food.js", "* Test item sentence. 10 health restored.", 10),
-            new ItemHealing("Food.js", "* Test item sentence. 10 health restored.", 10)
+            new Item(
+                "Food.js", 
+                "* Test item sentence. 10 health restored.",
+                function(){Player.heal(10)}),
         ]
     }
     
@@ -28,15 +29,27 @@ var Inventory = (function()
         return items[index].textDefault;
     }
     
+    function getLength()
+    {
+        return items.length;
+    }
+    
     function removeItem(index)
     {
         items.splice(index, 1);
+    }
+    
+    function activate(index)
+    {
+        items[index].activate();
     }
     
     return{
         init : init,
         getNames : getNames,
         getText : getText,
-        removeItem : removeItem
+        getLength : getLength,
+        removeItem : removeItem,
+        activate : activate
     }
 }());

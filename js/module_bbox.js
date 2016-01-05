@@ -10,7 +10,7 @@ var Bbox = (function()
     
     function init()
     {
-        console.log(this);
+
     }
     
     function setup(_pos, _width, _height)
