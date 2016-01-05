@@ -53,8 +53,7 @@ var Combat = (function()
 	}
     
     //Initialize with provided canvas.
-    function setup(
-        ctx)
+    function setup(ctx)
     {
 		Soul.getCollision(ctx);   //Form collision data for player.
         cgroup = new Cgroup();
@@ -106,7 +105,7 @@ var Combat = (function()
                         else
                         {
                             selectStateOther = 0;
-                            Sound.pauseSound("text"); 
+                            Sound.pauseSoundHard("text"); 
                         }
                         Sound.playSound("button", true);
                     }
@@ -128,6 +127,11 @@ var Combat = (function()
                 {
                     combatState = COMBAT_STATE.NAME;
                     Sound.playSound("button", true);
+                }
+                if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
+                {
+                    Cwriter.setText(cgroup.getRes(selectStateEnemy, selectStateOther));
+                    combatState = COMBAT_STATE.EFFECT;   
                 }
                 selectStateOther = detectHorizontalSelect(cgroup.getActs()[selectStateEnemy], selectStateOther);
                 break;

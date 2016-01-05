@@ -2,7 +2,7 @@
 var Cgroup = function()
 {
     this.enemies = [new Cenemy(), new Cenemy()];
-    this.mercies = ["Mercy", "Flee"];
+    this.mercies = ["Mercy"];
     this.defends = [new Cdefend()];
 }
 
@@ -50,6 +50,11 @@ Cgroup.prototype.getActs = function()
         acts.push(this.enemies[i].acts);
     }
     return acts;
+}
+
+Cgroup.prototype.getRes = function(selectStateEnemy, selectStateOther)
+{
+    return this.enemies[selectStateEnemy].ress[selectStateOther]
 }
 
 Cgroup.prototype.getMercies = function()

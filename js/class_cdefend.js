@@ -29,12 +29,12 @@ Cdefend.prototype.draw = function(ctx)
         40,
         40);
     ctx.rect(
-        100 + 75 * this.durationCounter,
+        100 + 85 * this.durationCounter,
         305,
         40,
         40);
     ctx.rect(
-        200 + 75 * this.durationCounter,
+        200 + 70 * this.durationCounter,
         345,
         40,
         40);
