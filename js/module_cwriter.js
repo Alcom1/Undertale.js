@@ -97,7 +97,8 @@ var Cwriter = (function()
                     break;
             }
         }
-        else
+        
+        if(charCounter >= text.length)
         {
             Sound.pauseSound("text"); 
         }        
