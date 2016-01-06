@@ -191,6 +191,7 @@ var Cwriter = (function()
         for(var i = 0; i < menu.length; i++)     
         {
             drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
+            ctx.fillStyle = "#FFF"; //Color reset in case of yellow stuff.
         }
     }
 
@@ -209,11 +210,19 @@ var Cwriter = (function()
         //Draw characters.
         for(var i = 0; i < text.length; i++)
         { 
-            ctx.fillText(
-                option.charAt(i),
-                xPos + 2 * Math.floor(Math.random() * 1.0004),     //Random text wobble.
-                yPos + 2 * Math.floor(Math.random() * 1.0004));
-            xPos += ctx.measureText(option.charAt(i)).width;
+            if(option.charAt(i) == "|")
+            {
+                ctx.fillStyle = option.substring(i + 1, i + 5);
+                i += 4;
+            }
+            else
+            {
+                ctx.fillText(
+                    option.charAt(i),
+                    xPos + 2 * Math.floor(Math.random() * 1.0004),     //Random text wobble.
+                    yPos + 2 * Math.floor(Math.random() * 1.0004));
+                xPos += ctx.measureText(option.charAt(i)).width;
+            }
         }    
     }
 

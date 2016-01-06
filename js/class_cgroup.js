@@ -2,7 +2,7 @@
 var Cgroup = function()
 {
     this.enemies = [new Cenemy(), new Cenemy()];
-    this.mercies = ["Mercy"];
+    this.mercies = ["|#FF0Spare", "Flee"];
     this.defends = [new Cdefend()];
 }
 

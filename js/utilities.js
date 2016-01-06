@@ -52,5 +52,3 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r)
     this.closePath();
     return this;
 }
-
-
