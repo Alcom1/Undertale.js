@@ -22,6 +22,7 @@ window.onload = function()
     Cwriter.init();
     Cattack.init();
     Chp.init();
+    Cdamage.init();
     Cmenu.init();
 	Sound.init(0.4);
 	Combat.init();

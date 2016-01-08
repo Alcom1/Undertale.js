@@ -66,6 +66,7 @@ var Combat = (function()
         Cwriter.setText(cgroup.getText());
         
         Cattack.setup();
+        Cdamage.setup(123456789012345);
     }
     
     //Update
@@ -259,6 +260,7 @@ var Combat = (function()
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
                 Cattack.draw(ctx);
+                Cdamage.draw(ctx);
                 break;
                 
             case COMBAT_STATE.ACT:
