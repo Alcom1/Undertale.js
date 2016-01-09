@@ -6,26 +6,28 @@ var Cattack = (function()
     var attackState;    //State of the attack.
     var ATTACK_STATE = Object.freeze(
     {
-        HIT : 0,
-        DAMAGE : 1
+        HIT : 0,        //State when dealing damage.
+        DAMAGE : 1      //Statr when displaying damage.
     });
     
-    var attackBars;
-    var attackFades;
-    var attackBoxOpacity;
-    var totalDamage;
-    var damageDelayCounter;
-    var damageDelay;
+    var attackBars;             //Bars representing each attack.
+    var attackFades;            //Bars representing each fade effect where an attack occured.
+    var attackBoxOpacity;       //Opacity of the attack box visual.
+    var totalDamage;            //Total damage dealt by attacks.
+    var damageDelayCounter;     //Counter for duration of damage display.
+    var damageDelay;            //Duration of the damage display that is seen after attacking.
     
+    //Init
     function init()
     {
         attackBox = document.getElementById("attack_box");
     }
     
+    //Setup
     function setup()
     {
-        attackBars = [37, 0 - Math.random() * 75];
-        attackBars.push(attackBars[1] - 30 - Math.random() * 75);
+        attackBars = [37, 0 - Math.random() * 75];                  //First two attack bars.
+        attackBars.push(attackBars[1] - 30 - Math.random() * 75);   //Second attack bar based on the first.
         attackFades = [];
         attackState = ATTACK_STATE.HIT;
         attackBoxOpacity = 1;
@@ -34,28 +36,33 @@ var Cattack = (function()
         damageDelay = 1;
     }
     
+    //Update
     function update(dt)
     {
         switch(attackState)
         {
             case ATTACK_STATE.HIT:
+                //Z button to deal an attack. Attacks are based on and consume an attack bar.
                 if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
-                    var hit = attackBars[0]
-                    var damage = Math.max(0, 282 - Math.abs(hit - 312));
-                    if(damage > 280)
+                    //Attack
+                    var hit = attackBars[0];                             //Hit at attack bar position.
+                    var damage = Math.max(0, 282 - Math.abs(hit - 312)); //Damage based on hit.
+                    if(damage > 280)            //Crit
                     {
-                        damage *= 1.5;
+                        damage *= 1.5;          //Crit multiplier
                         attackFades.push([hit, 1, 1]);
                     }
-                    else
+                    else                        //Normal hit
                     {
                         attackFades.push([hit, 0, 1]);
                     }
                     
-                    totalDamage += damage;
+                    totalDamage += damage;      //Increment damage
                     
-                    attackBars.splice(0, 1);
+                    attackBars.splice(0, 1);    //Remove the consumed attack bar.
+                    
+                    //Sfx for attack.
                     if(attackBars.length > 0)
                     {
                         if(damage < 280)
@@ -71,30 +78,34 @@ var Cattack = (function()
                             Sound.playSound("hit_2_crit", true);
                     }
                 }
+                
+                //Go to damage state if no attacks are left or if the attacks are beyond the canvas.
                 if(attackBars.length < 1 || attackBars[attackBars.length - 1] > 640)
                 {
                     attackState = ATTACK_STATE.DAMAGE;
                 }
                 
+                //Update attack bar positions.
                 for (var i = 0; i < attackBars.length; i++)
                 {
                     attackBars[i] += 240 * dt;
                 }
                 break;
             case ATTACK_STATE.DAMAGE:
-                attackBoxOpacity -= 2 * dt;
-                damageDelayCounter += dt;
-                if(attackBoxOpacity < 0)
+                attackBoxOpacity -= 2 * dt; //Fade out the attack box.
+                damageDelayCounter += dt;   //Increment the duration counter of the damage display.
+                if(attackBoxOpacity < 0)    //Force attack box opacity to be 0 once it reaches 0.
                 {
                     attackBoxOpacity = 0;
                 }
-                if(damageDelayCounter > damageDelay)
+                if(damageDelayCounter > damageDelay)    //Once duration is complete, return -1.
                 {
                     return -1;
                 }
                 break;
         }
-                
+        
+        //Update attack fade effects regardless of state.        
         for (var i = 0; i < attackFades.length; i++)
         {
             attackFades[i][2] -= 2 * dt;
@@ -104,11 +115,14 @@ var Cattack = (function()
             }
         }
         
+        //Return the totalDamage dealt.
         return totalDamage;          
     }
     
+    //Draw
     function draw(ctx)
     {
+        //Draw the attack box.
         ctx.save();
         ctx.globalAlpha = attackBoxOpacity;
         ctx.drawImage(
@@ -117,24 +131,27 @@ var Cattack = (function()
             255);
         ctx.restore();
         
+        //Draw everything else.
         ctx.save();
         switch(attackState)
         {
             case ATTACK_STATE.HIT:
+                //Draw attack bars.
                 ctx.lineWidth = 4;
-                
                 for (var i = 0; i < attackBars.length; i++)
                 {
-                    if(i)
+                    if(i)   //Attack bars > 1 colors.
                     {
                         ctx.strokeStyle = "#FFF";
                         ctx.fillStyle = "#000";       
                     }
-                    else
+                    else    //Attack bar 0 color.
                     {
                         ctx.strokeStyle = "#000";
                         ctx.fillStyle = "#FFF";     
                     }
+                    
+                    //Draw bar.
                     ctx.beginPath();
                     ctx.rect(attackBars[i], 258, 14, 125);
                     ctx.fill();
@@ -142,27 +159,31 @@ var Cattack = (function()
                 }
                 break;
             case ATTACK_STATE.DAMAGE:
+                //Draw nothing in damage state.
                 break;
         }
-                
+        
+        //Draw attack fades.
         for (var i = 0; i < attackFades.length; i++)
         {
             ctx.save();
-            ctx.globalAlpha = attackFades[i][2];
-        
+            ctx.globalAlpha = attackFades[i][2];    //Fade fadeout
+            
+            //Set style of each fade.
             switch(attackFades[i][1])
             {
-                case 0:
+                case 0:     //Normal
                     ctx.fillStyle = "#0FF";                 
                     break;
-                case 1:
-                    if(Math.floor(attackFades[i][2] * 6) % 2)
+                case 1:     //Crit
+                    if(Math.floor(attackFades[i][2] * 6) % 2)   //Flash between Green and Orange
                         ctx.fillStyle = "#F80";
                     else
                         ctx.fillStyle = "#0F0";  
                     break;
             }
             
+            //Draw fade
             ctx.beginPath();
             ctx.rect(
                 attackFades[i][0] - (1 - attackFades[i][2]) * 5,
@@ -175,6 +196,7 @@ var Cattack = (function()
         ctx.restore();       
     }
     
+    //Module return.
     return {
         init : init,
         setup : setup,
