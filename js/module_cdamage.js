@@ -23,7 +23,6 @@ var Cdamage = (function()
     function draw(ctx)
     {
         var subPos = pos.get();
-        console.log(document.getElementById("d" + damage.charAt(0)));
         for(var i = 0; i < damage.length; i++)
         {
             ctx.drawImage(

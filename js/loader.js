@@ -24,8 +24,9 @@ window.onload = function()
     Chp.init();
     Cdamage.init();
     Cmenu.init();
-	Sound.init(0.4);
+    Cgroup.init();
 	Combat.init();
+	Sound.init(0.4);
 	
 	//Main module
 	main.init();

@@ -30,8 +30,6 @@ var Combat = (function()
     
     var selectStateEnemy;  //Index of currently selected enemy.
     var selectStateOther;  //Index of currently selected anything else.
-    
-    var cgroup;       //Group of attacking enemies! D:
     var startPos;     //Starting position 
     
 	
@@ -56,14 +54,13 @@ var Combat = (function()
     function setup(ctx)
     {
 		Soul.getCollision(ctx);   //Form collision data for player.
-        cgroup = new Cgroup();
         
         Cwriter.setTimes(
             .75,
             .33,
             .21,
             .033);
-        Cwriter.setText(cgroup.getText());
+        Cwriter.setText(Cgroup.getText());
         
         Cattack.setup();
         Cdamage.setup(123456789012345);
@@ -117,8 +114,8 @@ var Combat = (function()
             	if(Cattack.update(dt) == -1)
                 {
                     combatState = COMBAT_STATE.RESPOND;
-                    Bbox.setSize(cgroup.getDefends().width, cgroup.getDefends().height, false);
-                    cgroup.getDefends().setup();
+                    Bbox.setSize(Cgroup.getDefends().width, Cgroup.getDefends().height, false);
+                    Cgroup.getDefends().setup();
                     Cwriter.reset();
                 }
                 break;
@@ -131,10 +128,10 @@ var Combat = (function()
                 }
                 if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
-                    Cwriter.setText(cgroup.getRes(selectStateEnemy, selectStateOther));
+                    Cwriter.setText(Cgroup.getRes(selectStateEnemy, selectStateOther));
                     combatState = COMBAT_STATE.EFFECT;   
                 }
-                selectStateOther = detectHorizontalSelect(cgroup.getActs()[selectStateEnemy], selectStateOther);
+                selectStateOther = detectHorizontalSelect(Cgroup.getActs()[selectStateEnemy], selectStateOther);
                 break;
                 
             case COMBAT_STATE.ITEM:
@@ -161,7 +158,7 @@ var Combat = (function()
                     Cwriter.reset();
                     Sound.playSound("button", true);
                 }
-                selectStateOther = detectVerticalSelect(cgroup.getMercies(), selectStateOther);
+                selectStateOther = detectVerticalSelect(Cgroup.getMercies(), selectStateOther);
                 break;
             
             case COMBAT_STATE.EFFECT:
@@ -169,9 +166,9 @@ var Combat = (function()
                 if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = COMBAT_STATE.RESPOND;
-                    Bbox.setSize(cgroup.getDefends().width, cgroup.getDefends().height, false);
-                    cgroup.getDefends().setup();
-                    Cwriter.setText(cgroup.getText());
+                    Bbox.setSize(Cgroup.getDefends().width, Cgroup.getDefends().height, false);
+                    Cgroup.getDefends().setup();
+                    Cwriter.setText(Cgroup.getText());
                     Sound.pauseSound("text"); 
                 }
                 break;
@@ -186,7 +183,7 @@ var Combat = (function()
             case COMBAT_STATE.DEFEND:
 				Soul.move(dt);
 				Soul.limit(Bbox.getBound());
-                if(cgroup.getDefends().update(dt))
+                if(Cgroup.getDefends().update(dt))
                 {
                     Bbox.setSize(574, 140, false);
                     combatState = COMBAT_STATE.MAIN;
@@ -215,7 +212,7 @@ var Combat = (function()
                 {
                     Cattack.setup();
                 }
-                selectStateEnemy = detectVerticalSelect(cgroup.getNames(), selectStateEnemy);
+                selectStateEnemy = detectVerticalSelect(Cgroup.getNames(), selectStateEnemy);
                 break;
         }
         
@@ -267,7 +264,7 @@ var Combat = (function()
 				Bbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
-                Cwriter.drawMenu(ctx, cgroup.getActs()[selectStateEnemy], menuState, MENU_STATE);
+                Cwriter.drawMenu(ctx, Cgroup.getActs()[selectStateEnemy], menuState, MENU_STATE);
 				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateOther, 0));
                 break;
                 
@@ -283,7 +280,7 @@ var Combat = (function()
 				Bbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
-                Cwriter.drawMenu(ctx, cgroup.getMercies(), menuState, MENU_STATE);
+                Cwriter.drawMenu(ctx, Cgroup.getMercies(), menuState, MENU_STATE);
 				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateOther, 1));
                 break;
             
@@ -305,7 +302,7 @@ var Combat = (function()
 				Bbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
-                cgroup.getDefends().draw(ctx);
+                Cgroup.getDefends().draw(ctx);
 				Soul.checkCollision(ctx);
 				Soul.draw(ctx);
                 break;
@@ -322,7 +319,7 @@ var Combat = (function()
 				Bbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, menuState, MENU_STATE);
-				Cwriter.drawMenu(ctx, cgroup.getNames(), 0, MENU_STATE);
+				Cwriter.drawMenu(ctx, Cgroup.getNames(), 0, MENU_STATE);
 				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateEnemy, 1));
                 break;
         }

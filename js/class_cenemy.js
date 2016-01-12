@@ -10,6 +10,7 @@ var Cenemy = function()
     this.def = 5;
     this.maxHP = 2500;
     this.curHP = 2500;
+    this.damagePos = new Vect(320, 200, 0);
 }
 
 Cenemy.prototype.update = function(dt)
