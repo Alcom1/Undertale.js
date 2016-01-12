@@ -67,6 +67,16 @@ var Cgroup = (function()
     {
         return enemies[selectStateEnemy].damagePos;
     }
+    
+    function getMaxHP(selectStateEnemy)
+    {
+        return enemies[selectStateEnemy].maxHP;
+    }
+    
+    function getCurHP(selectStateEnemy)
+    {
+        return enemies[selectStateEnemy].curHP;
+    }
 
     function getMercies()
     {
@@ -82,6 +92,9 @@ var Cgroup = (function()
         getText : getText,
         getActs : getActs,
         getRes : getRes,
+        getDamagePos : getDamagePos,
+        getMaxHP : getMaxHP,
+        getCurHP : getCurHP,
         getMercies : getMercies
     }
 }());

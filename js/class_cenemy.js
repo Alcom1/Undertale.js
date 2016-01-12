@@ -8,8 +8,8 @@ var Cenemy = function()
     this.ress = ["* Checking.", "* Beep.", "* Boop."];
     this.atk = 5;
     this.def = 5;
-    this.maxHP = 2500;
-    this.curHP = 2500;
+    this.maxHP = 200;
+    this.curHP = 100;
     this.damagePos = new Vect(320, 200, 0);
 }
 

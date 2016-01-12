@@ -7,15 +7,21 @@ var Cattack = (function()
     var ATTACK_STATE = Object.freeze(
     {
         HIT : 0,        //State when dealing damage.
-        DAMAGE : 1      //Statr when displaying damage.
+        SMASH : 1,      //State when showing smash effect.
+        DAMAGE : 2      //Statr when displaying damage.
     });
     
     var attackBars;             //Bars representing each attack.
     var attackFades;            //Bars representing each fade effect where an attack occured.
     var attackBoxOpacity;       //Opacity of the attack box visual.
     var totalDamage;            //Total damage dealt by attacks.
+    var smashDelayCounter;      //Counter for duration of smash effect.
+    var smashDelay;             //Duration of the smash effect.
     var damageDelayCounter;     //Counter for duration of damage display.
     var damageDelay;            //Duration of the damage display that is seen after attacking.
+    
+    var healthPos;
+    var healthWidth;
     
     //Init
     function init()
@@ -32,8 +38,15 @@ var Cattack = (function()
         attackState = ATTACK_STATE.HIT;
         attackBoxOpacity = 1;
         totalDamage = 0;       
+        smashDelayCounter = 0;
+        smashDelay = 1.2;
         damageDelayCounter = 0;
-        damageDelay = 1;
+        damageDelay = 2.2;
+        
+        healthWidth = Cgroup.getMaxHP(Combat.getSelectStateEnemy());
+        healthPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get(); 
+        healthPos.x -= healthWidth / 2; 
+            
     }
     
     //Update
@@ -72,7 +85,7 @@ var Cattack = (function()
                     }
                     else
                     {
-                        if(totalDamage < 1200)
+                        if(damage < 280)
                             Sound.playSound("hit_2", true);
                         else
                             Sound.playSound("hit_2_crit", true);
@@ -82,7 +95,7 @@ var Cattack = (function()
                 //Go to damage state if no attacks are left or if the attacks are beyond the canvas.
                 if(attackBars.length < 1 || attackBars[attackBars.length - 1] > 640)
                 {
-                    attackState = ATTACK_STATE.DAMAGE;
+                    attackState = ATTACK_STATE.SMASH;
                 }
                 
                 //Update attack bar positions.
@@ -91,6 +104,12 @@ var Cattack = (function()
                     attackBars[i] += 240 * dt;
                 }
                 break;
+            case ATTACK_STATE.SMASH:
+                smashDelayCounter += dt;
+                if(smashDelayCounter > smashDelay)
+                {
+                    attackState = ATTACK_STATE.DAMAGE
+                }
             case ATTACK_STATE.DAMAGE:
                 attackBoxOpacity -= 2 * dt; //Fade out the attack box.
                 damageDelayCounter += dt;   //Increment the duration counter of the damage display.
@@ -158,8 +177,26 @@ var Cattack = (function()
                     ctx.stroke();
                 }
                 break;
+            case ATTACK_STATE.SMASH:
+                break;
             case ATTACK_STATE.DAMAGE:
-                //Draw nothing in damage state.
+                ctx.fillStyle = "#404040";
+                ctx.strokeStyle = "#000";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.rect(
+                    healthPos.x - .5,
+                    healthPos.y - .5,
+                    healthWidth,
+                    15);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = "#0F0";
+                ctx.fillRect(
+                    healthPos.x - .5,
+                    healthPos.y - .5,
+                    Cgroup.getCurHP(Combat.getSelectStateEnemy()),
+                    15);
                 break;
         }
         
