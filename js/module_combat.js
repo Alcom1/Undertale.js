@@ -30,14 +30,14 @@ var Combat = (function()
     
     var selectStateEnemy;  //Index of currently selected enemy.
     var selectStateOther;  //Index of currently selected anything else.
-    var startPos;     //Starting position 
+    var startPos;          //Starting position 
     
 	
 	//Init
 	function init()
 	{
         //Initial states for combat
-        combatState = COMBAT_STATE.MAIN;
+        combatState = COMBAT_STATE.FLASH;
         menuState = MENU_STATE.FIGHT;
         selectStateEnemy = 0;
         selectStateOther = 0;
@@ -131,7 +131,7 @@ var Combat = (function()
                 break;
                 
             case COMBAT_STATE.FIGHT:
-            	if(Cattack.update(dt) == -1)
+            	if(Cattack.update(dt))
                 {
                     combatState = COMBAT_STATE.RESPOND;
                     Bbox.setSize(Cgroup.getDefends().width, Cgroup.getDefends().height, false);
@@ -211,6 +211,10 @@ var Combat = (function()
                 break;
                 
             case COMBAT_STATE.FLASH:
+                if(Soul.update(dt))
+                {
+                    combatState = COMBAT_STATE.MAIN;
+                }
                 break;
                 
             case COMBAT_STATE.DEATH:

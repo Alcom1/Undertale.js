@@ -156,7 +156,7 @@ var Cattack = (function()
                 delayCounter += dt;
                 if(delayCounter > delay)
                 {
-                    return -1;   
+                    return true;   
                 }
                 break;
         }
@@ -172,7 +172,7 @@ var Cattack = (function()
         }
         
         //Return the totalDamage dealt.
-        return 0;          
+        return false;          
     }
     
     //Draw

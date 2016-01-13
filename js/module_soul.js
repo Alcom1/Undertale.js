@@ -4,35 +4,101 @@ var Soul = (function()
     var pos;            //Position (top-left corner)
     var sprite;         //Main sprite
     var spriteDmg;	    //Second sprite to display when taking damage.
+    var spriteOver;     //Overworld Sprite
     
-    var dmg;			//True when taking damage.
     var speed;			//Soul speed on bullet board.
-    
     var colData;    	//Collision data
+    
+    var soulState;
+    var SOUL_STATE = Object.freeze(
+    {
+        OKAY : 0,
+        DAMAGED : 1,
+        FLASH : 2,
+        TRANSITION : 3,
+    });
+    
+    var delay;
+    var delayCounter;
     
     //Initialize the soul.
     function init()
     {
         sprite = document.getElementById("heart");
         spriteDmg = document.getElementById("heart_dmg");
+        spriteOver = document.getElementById("heart_over");
     }
     
     //Setup the soul.
     function setup(_pos)
     {
         pos = _pos;
-        dmg = false;
+        soulState = SOUL_STATE.FLASH;
+        delayCounter = 0;
+        delay = .4;
         speed = 100;
+        Sound.playSound("flash", true);
+    }
+    
+    //Update the player soul.
+    function update(dt)
+    {
+        switch(soulState)
+        {
+            case SOUL_STATE.FLASH:
+                delayCounter += dt;
+                if(delayCounter > delay)
+                {
+                    delayCounter = 0;
+                    delay = 2;
+                    soulState = SOUL_STATE.TRANSITION;
+                }
+                break;
+            case SOUL_STATE.TRANSITION:
+                delayCounter += dt;
+                pos.add(pos.getSub(new Vect(40, 446, 0)).getNorm().getMult(-400 * dt));
+                if(pos.x < 40)
+                {
+                    pos = new Vect(310, 309, 0);
+                    soulState = SOUL_STATE.OKAY;
+                    return true;
+                }
+                break;
+        }
+        
+        return false;
     }
     
     //Draws the player soul.
     function draw(ctx)
     {
         ctx.save();
-        ctx.drawImage(
-            dmg ? spriteDmg : sprite,	//Draw damaged soul when taking damage.
-            pos.x,
-            pos.y);
+        switch(soulState)
+        {
+            case SOUL_STATE.OKAY:
+                ctx.drawImage(
+                    sprite,
+                    pos.x,
+                    pos.y);
+                break;
+            case SOUL_STATE.DAMAGED:
+                ctx.drawImage(
+                    spriteDmg,
+                    pos.x,
+                    pos.y);
+                break;
+            case SOUL_STATE.FLASH:
+                if(Math.floor(delayCounter * 50) % 5 > 2)
+                {
+                    break;
+                }
+            case SOUL_STATE.TRANSITION:
+                ctx.drawImage(
+                    spriteOver,
+                    pos.x,
+                    pos.y);
+                break;
+        }
         ctx.restore();
     }
     
@@ -89,13 +155,13 @@ var Soul = (function()
             //If non-black pixel is detected, set damage to true and return true.
             if(imgData.data[colData[i]])
             {
-                dmg = true;
+                soulState = SOUL_STATE.DAMAGED;
                 return;
             }
         }
         
         //No damage if no collision occured.
-        dmg = false;
+        soulState = SOUL_STATE.OKAY;
     }
 
     //Move soul based on key input
@@ -143,6 +209,7 @@ var Soul = (function()
     return{
         init : init,
         setup : setup,
+        update : update,
         draw : draw,
         drawAt : drawAt,
         getCollision : getCollision,
