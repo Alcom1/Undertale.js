@@ -83,6 +83,13 @@ var Cgroup = (function()
         return mercies;
     }
     
+    function dealDamage(selectStateEnemy, damage)
+    {
+        enemies[selectStateEnemy].curHP -=
+            damage /
+            enemies[selectStateEnemy].defense;
+    }
+    
     return {
         init : init,
         update : update,
@@ -95,6 +102,7 @@ var Cgroup = (function()
         getDamagePos : getDamagePos,
         getMaxHP : getMaxHP,
         getCurHP : getCurHP,
-        getMercies : getMercies
+        getMercies : getMercies,
+        dealDamage : dealDamage,
     }
 }());

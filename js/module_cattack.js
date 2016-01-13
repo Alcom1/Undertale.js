@@ -17,11 +17,11 @@ var Cattack = (function()
     var totalDamage;            //Total damage dealt by attacks.
     var smashDelayCounter;      //Counter for duration of smash effect.
     var smashDelay;             //Duration of the smash effect.
-    var damageDelayCounter;     //Counter for duration of damage display.
-    var damageDelay;            //Duration of the damage display that is seen after attacking.
     
+    var healthTemp;
     var healthBarPos;
     var healthBarWidth;
+    var healthBarVel;
     var healthTextPos;
     var healthTextVel;
     var healthTextAcc;
@@ -43,12 +43,12 @@ var Cattack = (function()
         totalDamage = 0;       
         smashDelayCounter = 0;
         smashDelay = 1.2;
-        damageDelayCounter = 0;
-        damageDelay = 1.6;
         
+        healthTemp = Cgroup.getCurHP(Combat.getSelectStateEnemy());
         healthBarWidth = Cgroup.getMaxHP(Combat.getSelectStateEnemy());
         healthBarPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get(); 
         healthBarPos.x -= healthBarWidth / 2;
+        healthBarVel = 25;
         healthTextPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get();
         healthTextPos.y -= 32;
         healthTextVel = -160;
@@ -129,13 +129,12 @@ var Cattack = (function()
                         else
                             healthTextPos.x -= 16;
                     }
+                    Cgroup.dealDamage(Combat.getSelectStateEnemy(), totalDamage);
                     Sound.playSound("impact", true);
                     attackState = ATTACK_STATE.DAMAGE
                 }
                 break;
             case ATTACK_STATE.DAMAGE:
-                damageDelayCounter += dt;   //Increment the duration counter of the damage display.
-                
                 healthTextVel += healthTextAcc * dt;
                 healthTextPos.y += healthTextVel * dt;
                 if(healthTextPos.y > healthBarPos.y - 32 && healthTextVel > 0)
@@ -144,7 +143,9 @@ var Cattack = (function()
                     healthTextVel = 0;
                     healthTextAcc = 0;
                 }
-                if(damageDelayCounter > damageDelay)    //Once duration is complete, return -1.
+                
+                healthTemp -= healthBarVel * dt;
+                if(healthTemp < Cgroup.getCurHP(Combat.getSelectStateEnemy()))
                 {
                     return -1;
                 }
@@ -222,7 +223,7 @@ var Cattack = (function()
                 ctx.fillRect(
                     healthBarPos.x - .5,
                     healthBarPos.y - .5,
-                    Cgroup.getCurHP(Combat.getSelectStateEnemy()),
+                    healthTemp,
                     15);
                 var subPos = healthTextPos.get();
                 for(var i = 0; i < totalDamage.length; i++)
