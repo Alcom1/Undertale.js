@@ -9,8 +9,8 @@ var Cenemy = function()
     this.atk = 5;
     this.def = 5;
     this.maxHP = 200;
-    this.curHP = 100;
-    this.defense = 20;
+    this.curHP = 200;
+    this.defense = 10;
     this.damagePos = new Vect(320, 200, 0);
 }
 

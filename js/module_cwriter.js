@@ -169,16 +169,16 @@ var Cwriter = (function()
         switch(menuState)
         {
             case MENU_STATE.ACT:
-                drawMenuTexts(ctx, menu, horizontalPositions);
+                drawMenuTexts(ctx, menu, horizontalPositions, false);
                 break;
             case MENU_STATE.ITEM:
-                drawMenuTexts(ctx, menu, horizontalPositions);
+                drawMenuTexts(ctx, menu, horizontalPositions, false);
                 break;
             case MENU_STATE.MERCY:
-                drawMenuTexts(ctx, menu, verticalPositions);
+                drawMenuTexts(ctx, menu, verticalPositions, false);
                 break;
             default:
-                drawMenuTexts(ctx, menu, verticalPositions);
+                drawMenuTexts(ctx, menu, verticalPositions, true);
                 break;
         }
         
@@ -186,12 +186,42 @@ var Cwriter = (function()
     }
 
     //Draw text for all menu options.
-    function drawMenuTexts(ctx, menu, positions)
+    function drawMenuTexts(ctx, menu, positions, bars)
     {
+        var barPos = 0;
+        if(bars)
+        {
+            for(var i = 0; i < menu.length; i++)     
+            {
+                var temp = ctx.measureText(menu[i]).width;
+                if(temp > barPos)
+                    barPos = temp;
+            }
+        }
         for(var i = 0; i < menu.length; i++)     
         {
             drawMenuText(ctx, menu[i], positions[i][0], positions[i][1]);
-            ctx.fillStyle = "#FFF"; //Color reset in case of yellow stuff.
+            if(bars)
+            {
+                ctx.fillStyle = "#404040";
+                ctx.strokeStyle = "#000";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.rect(
+                    positions[i][0] + barPos + 50,
+                    positions[i][1] - 15,
+                    100,
+                    15);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = "#0F0";
+                ctx.fillRect(
+                    positions[i][0] + barPos + 50,
+                    positions[i][1] - 15,
+                    100 * Cgroup.getCurHP(i) / Cgroup.getMaxHP(i),
+                    15);
+            }
+            ctx.fillStyle = "#FFF"; //Color reset.
         }
     }
 

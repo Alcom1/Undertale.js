@@ -94,16 +94,37 @@ var Combat = (function()
                     }
                     if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                     {
-                        combatState = menuState == MENU_STATE.ITEM || menuState == MENU_STATE.MERCY ? menuState : COMBAT_STATE.NAME;
-                        if(combatState == COMBAT_STATE.ITEM && Inventory.getLength() <= 0)
+                        switch(menuState)
                         {
-                            combatState = COMBAT_STATE.MAIN;
+                            case MENU_STATE.FIGHT:
+                                combatState = COMBAT_STATE.NAME;
+                                selectStateOther = 0;
+                                Sound.pauseSoundHard("text");
+                                break;
+                            case MENU_STATE.ACT:
+                                combatState = COMBAT_STATE.NAME;
+                                selectStateOther = 0;
+                                Sound.pauseSoundHard("text");
+                                break;     
+                            case MENU_STATE.ITEM:
+                                combatState = menuState;
+                                if(Inventory.getLength() <= 0)
+                                {
+                                    combatState = COMBAT_STATE.MAIN;
+                                }
+                                else
+                                {
+                                    selectStateOther = 0;
+                                    Sound.pauseSoundHard("text");
+                                }
+                                break;
+                            case MENU_STATE.MERCY:
+                                combatState = menuState;
+                                selectStateOther = 0;
+                                Sound.pauseSoundHard("text");
+                                break;                            
                         }
-                        else
-                        {
-                            selectStateOther = 0;
-                            Sound.pauseSoundHard("text"); 
-                        }
+                             
                         Sound.playSound("button", true);
                     }
                 }
