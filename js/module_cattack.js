@@ -20,8 +20,11 @@ var Cattack = (function()
     var damageDelayCounter;     //Counter for duration of damage display.
     var damageDelay;            //Duration of the damage display that is seen after attacking.
     
-    var healthPos;
-    var healthWidth;
+    var healthBarPos;
+    var healthBarWidth;
+    var healthTextPos;
+    var healthTextVel;
+    var healthTextAcc;
     
     //Init
     function init()
@@ -41,11 +44,15 @@ var Cattack = (function()
         smashDelayCounter = 0;
         smashDelay = 1.2;
         damageDelayCounter = 0;
-        damageDelay = 2.2;
+        damageDelay = 1;
         
-        healthWidth = Cgroup.getMaxHP(Combat.getSelectStateEnemy());
-        healthPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get(); 
-        healthPos.x -= healthWidth / 2; 
+        healthBarWidth = Cgroup.getMaxHP(Combat.getSelectStateEnemy());
+        healthBarPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get(); 
+        healthBarPos.x -= healthBarWidth / 2;
+        healthTextPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get();
+        healthTextPos.y -= 50;
+        healthTextVel = -175;
+        healthTextAcc = 800;
             
     }
     
@@ -59,7 +66,7 @@ var Cattack = (function()
                 if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     //Attack
-                    var hit = attackBars[0];                             //Hit at attack bar position.
+                    var hit = attackBars[0];                                         //Hit at attack bar position.
                     var damage = Math.max(0, 282 - Math.abs(hit - 312)); //Damage based on hit.
                     if(damage > 280)            //Crit
                     {
@@ -70,6 +77,7 @@ var Cattack = (function()
                     {
                         attackFades.push([hit, 0, 1]);
                     }
+                    damage = Math.floor(damage);
                     
                     totalDamage += damage;      //Increment damage
                     
@@ -105,17 +113,36 @@ var Cattack = (function()
                 }
                 break;
             case ATTACK_STATE.SMASH:
-                smashDelayCounter += dt;
-                if(smashDelayCounter > smashDelay)
-                {
-                    attackState = ATTACK_STATE.DAMAGE
-                }
-            case ATTACK_STATE.DAMAGE:
                 attackBoxOpacity -= 2 * dt; //Fade out the attack box.
-                damageDelayCounter += dt;   //Increment the duration counter of the damage display.
+                smashDelayCounter += dt;
                 if(attackBoxOpacity < 0)    //Force attack box opacity to be 0 once it reaches 0.
                 {
                     attackBoxOpacity = 0;
+                }
+                if(smashDelayCounter > smashDelay)
+                {
+                    totalDamage = totalDamage.toString();
+                    console.log(totalDamage);
+                    for(var i = 0; i < totalDamage.length; i++)
+                    {
+                        if(totalDamage.charAt(i) == 1)
+                            healthTextPos.x -= 10;
+                        else
+                            healthTextPos.x -= 16;
+                    }
+                    attackState = ATTACK_STATE.DAMAGE
+                }
+                break;
+            case ATTACK_STATE.DAMAGE:
+                damageDelayCounter += dt;   //Increment the duration counter of the damage display.
+                
+                healthTextVel += healthTextAcc * dt;
+                healthTextPos.y += healthTextVel * dt;
+                if(healthTextPos.y > healthBarPos.y - 32 && healthTextVel > 0)
+                {
+                    healthTextPos.y = healthBarPos.y - 32;
+                    healthTextVel = 0;
+                    healthTextAcc = 0;
                 }
                 if(damageDelayCounter > damageDelay)    //Once duration is complete, return -1.
                 {
@@ -135,7 +162,7 @@ var Cattack = (function()
         }
         
         //Return the totalDamage dealt.
-        return totalDamage;          
+        return 0;          
     }
     
     //Draw
@@ -185,18 +212,35 @@ var Cattack = (function()
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.rect(
-                    healthPos.x - .5,
-                    healthPos.y - .5,
-                    healthWidth,
+                    healthBarPos.x - .5,
+                    healthBarPos.y - .5,
+                    healthBarWidth,
                     15);
                 ctx.fill();
                 ctx.stroke();
                 ctx.fillStyle = "#0F0";
                 ctx.fillRect(
-                    healthPos.x - .5,
-                    healthPos.y - .5,
+                    healthBarPos.x - .5,
+                    healthBarPos.y - .5,
                     Cgroup.getCurHP(Combat.getSelectStateEnemy()),
                     15);
+                var subPos = healthTextPos.get();
+                for(var i = 0; i < totalDamage.length; i++)
+                {
+                    ctx.drawImage(
+                        document.getElementById("d" + totalDamage.charAt(i)),
+                        subPos.x, 
+                        subPos.y);
+                        
+                    if(totalDamage.charAt(i) == 1)
+                    {    
+                        subPos.x += 20;
+                    }
+                    else
+                    {
+                        subPos.x += 32;
+                    }
+                }
                 break;
         }
         
