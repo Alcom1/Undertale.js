@@ -16,6 +16,7 @@ var Soul = (function()
         DAMAGED : 1,
         FLASH : 2,
         TRANSITION : 3,
+        FADEIN : 4,
     });
     
     var delay;
@@ -60,13 +61,28 @@ var Soul = (function()
                 if(pos.x < 40)
                 {
                     pos = new Vect(310, 309, 0);
-                    soulState = SOUL_STATE.OKAY;
+                    delayCounter = 0;
+                    delay = .5;
+                    soulState = SOUL_STATE.FADEIN;
                     return true;
+                }
+                break;
+            case SOUL_STATE.FADEIN:
+                delayCounter += dt;
+                if(delayCounter > delay)
+                {
+                    soulState = SOUL_STATE.OKAY;
                 }
                 break;
         }
         
         return false;
+    }
+    
+    //Gets an opacity value based on the current delay value
+    function getOpacity()
+    {
+        return delayCounter * 4; 
     }
     
     //Draws the player soul.
@@ -210,6 +226,7 @@ var Soul = (function()
         init : init,
         setup : setup,
         update : update,
+        getOpacity : getOpacity,
         draw : draw,
         drawAt : drawAt,
         getCollision : getCollision,

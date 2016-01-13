@@ -72,6 +72,7 @@ var Combat = (function()
         switch(combatState)
         {
             case COMBAT_STATE.MAIN:
+                Soul.update(dt);
                 if(Bbox.update(dt))
                 {
                     Cwriter.update(dt);
@@ -255,6 +256,8 @@ var Combat = (function()
         switch(combatState)
         {
             case COMBAT_STATE.MAIN:
+                ctx.save();
+                ctx.globalAlpha = Soul.getOpacity();
 				Bbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, menuState, MENU_STATE);
@@ -274,6 +277,7 @@ var Combat = (function()
 				        Soul.drawAt(ctx, new Vect(508, 446, 0));
                         break;
                 }
+                ctx.restore();
                 break;
                 
             case COMBAT_STATE.FIGHT:

@@ -58,7 +58,6 @@ var Bbox = (function()
     function draw(ctx)
     {	
         ctx.save();
-        
         //White
         ctx.fillStyle = "#FFF";
         ctx.fillRect(
@@ -68,6 +67,7 @@ var Bbox = (function()
             height);
         
         //Black
+        ctx.globalAlpha = 1;
         ctx.fillStyle = "#000";
         ctx.fillRect(
             pos.x + 5 - width / 2, 
