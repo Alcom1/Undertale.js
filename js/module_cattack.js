@@ -44,15 +44,15 @@ var Cattack = (function()
         smashDelayCounter = 0;
         smashDelay = 1.2;
         damageDelayCounter = 0;
-        damageDelay = 1;
+        damageDelay = 1.6;
         
         healthBarWidth = Cgroup.getMaxHP(Combat.getSelectStateEnemy());
         healthBarPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get(); 
         healthBarPos.x -= healthBarWidth / 2;
         healthTextPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get();
-        healthTextPos.y -= 50;
-        healthTextVel = -175;
-        healthTextAcc = 800;
+        healthTextPos.y -= 32;
+        healthTextVel = -160;
+        healthTextAcc = 500;
             
     }
     
@@ -122,7 +122,6 @@ var Cattack = (function()
                 if(smashDelayCounter > smashDelay)
                 {
                     totalDamage = totalDamage.toString();
-                    console.log(totalDamage);
                     for(var i = 0; i < totalDamage.length; i++)
                     {
                         if(totalDamage.charAt(i) == 1)
@@ -130,6 +129,7 @@ var Cattack = (function()
                         else
                             healthTextPos.x -= 16;
                     }
+                    Sound.playSound("impact", true);
                     attackState = ATTACK_STATE.DAMAGE
                 }
                 break;
