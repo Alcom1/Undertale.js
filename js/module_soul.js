@@ -199,7 +199,7 @@ var Soul = (function()
                 {
                     delayCounter = 0;
                     delay = 4;
-                    Player.damage(1);
+                    Player.damage(4);
                     soulState = SOUL_STATE.DAMAGED;
                     return;
                 }

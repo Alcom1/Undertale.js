@@ -168,6 +168,9 @@ var Cwriter = (function()
         
         switch(menuState)
         {
+            case MENU_STATE.FIGHT:
+                drawMenuTexts(ctx, menu, verticalPositions, true);
+                break;
             case MENU_STATE.ACT:
                 drawMenuTexts(ctx, menu, horizontalPositions, false);
                 break;
@@ -178,7 +181,7 @@ var Cwriter = (function()
                 drawMenuTexts(ctx, menu, verticalPositions, false);
                 break;
             default:
-                drawMenuTexts(ctx, menu, verticalPositions, true);
+                drawMenuTexts(ctx, menu, verticalPositions, false);
                 break;
         }
         

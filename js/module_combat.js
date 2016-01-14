@@ -353,7 +353,14 @@ var Combat = (function()
 				Bbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, menuState, MENU_STATE);
-				Cwriter.drawMenu(ctx, Cgroup.getNames(), 0, MENU_STATE);
+                if(menuState == MENU_STATE.FIGHT)
+                {
+                    Cwriter.drawMenu(ctx, Cgroup.getNames(), menuState, MENU_STATE);
+                }
+                else
+                {
+                    Cwriter.drawMenu(ctx, Cgroup.getNames(), 4, MENU_STATE);
+                }
 				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateEnemy, 1));
                 break;
         }
