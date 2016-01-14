@@ -144,8 +144,13 @@ var Cattack = (function()
                     healthTextAcc = 0;
                 }
                 
-                healthTemp -= healthBarVel * dt;
-                if(healthTemp < Cgroup.getCurHP(Combat.getSelectStateEnemy()) && !healthTextAcc)
+                healthTemp -= healthBarVel * dt;    
+                if(healthTemp < Cgroup.getCurHP(Combat.getSelectStateEnemy()))
+                {
+                    healthTemp = Cgroup.getCurHP(Combat.getSelectStateEnemy());
+                }
+                
+                if(healthTemp <= Cgroup.getCurHP(Combat.getSelectStateEnemy()) && !healthTextAcc)
                 {
                     delayCounter = 0;
                     delay = .5;

@@ -68,11 +68,16 @@ var Combat = (function()
     //Update
 	function update(dt)
 	{
+        //Seperate as to ensure that the soul finishes updating.
+        if(combatState != COMBAT_STATE.FLASH)
+        {
+            Soul.update(dt);
+        }
+        
         //States for the combat sequence.
         switch(combatState)
         {
             case COMBAT_STATE.MAIN:
-                Soul.update(dt);
                 if(Bbox.update(dt))
                 {
                     Cwriter.update(dt);
@@ -202,6 +207,7 @@ var Combat = (function()
                 break;
                 
             case COMBAT_STATE.DEFEND:
+                Soul.update(dt);
 				Soul.move(dt);
 				Soul.limit(Bbox.getBound());
                 if(Cgroup.getDefends().update(dt))

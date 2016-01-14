@@ -52,6 +52,13 @@ var Soul = (function()
     {
         switch(soulState)
         {
+            case SOUL_STATE.DAMAGED:
+                delayCounter += dt;
+                if(delayCounter > delay)
+                {
+                    soulState = SOUL_STATE.OKAY;
+                }
+                break;
             case SOUL_STATE.FLASH:
                 delayCounter += dt;
                 if(delayCounter > delay)
@@ -79,7 +86,7 @@ var Soul = (function()
                 {
                     soulState = SOUL_STATE.OKAY;
                 }
-                break;
+                return true;
         }
         
         return false;
@@ -104,10 +111,20 @@ var Soul = (function()
                     pos.y);
                 break;
             case SOUL_STATE.DAMAGED:
-                ctx.drawImage(
-                    spriteDmg,
-                    pos.x,
-                    pos.y);
+                if(Math.floor(delayCounter * 5) % 2)
+                {
+                    ctx.drawImage(
+                        spriteDmg,
+                        pos.x,
+                        pos.y);
+                }
+                else
+                {
+                    ctx.drawImage(
+                        sprite,
+                        pos.x,
+                        pos.y);
+                }
                 break;
             case SOUL_STATE.FLASH:
                 if(Math.floor(delayCounter * 50) % 5 > 2)
@@ -165,26 +182,29 @@ var Soul = (function()
     //Check collision for player
     function checkCollision(ctx)
     {
-        //Get image data at player position (Hopefully before the player is drawn).
-        var imgData = ctx.getImageData(
-            pos.x,
-            pos.y,
-            sprite.width,
-            sprite.height);
-        
-        //For each index in collision data, check if the pixel has a non-0 red channel.
-        for(var i = 0; i < colData.length; i++)
+        if(soulState == SOUL_STATE.OKAY)
         {
-            //If non-black pixel is detected, set damage to true and return true.
-            if(imgData.data[colData[i]])
+            //Get image data at player position (Hopefully before the player is drawn).
+            var imgData = ctx.getImageData(
+                pos.x,
+                pos.y,
+                sprite.width,
+                sprite.height);
+            
+            //For each index in collision data, check if the pixel has a non-0 red channel.
+            for(var i = 0; i < colData.length; i++)
             {
-                soulState = SOUL_STATE.DAMAGED;
-                return;
+                //If non-black pixel is detected, set damage to true and return true.
+                if(imgData.data[colData[i]])
+                {
+                    delayCounter = 0;
+                    delay = 4;
+                    Player.damage(1);
+                    soulState = SOUL_STATE.DAMAGED;
+                    return;
+                }
             }
         }
-        
-        //No damage if no collision occured.
-        soulState = SOUL_STATE.OKAY;
     }
 
     //Move soul based on key input

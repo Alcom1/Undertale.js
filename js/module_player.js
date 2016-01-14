@@ -9,7 +9,7 @@ var Player = (function()
     {
         weapon = {};
         armor = {};
-        hpCur = 2;
+        hpCur = 20;
         hpMax = 20;
     }
     
@@ -45,6 +45,18 @@ var Player = (function()
         return false;        
     }
     
+    function damage(value)
+    {
+        Sound.playSound("damage", true);
+        hpCur -= value;
+        if(hpCur < 0)
+        {
+            hpCur = 0;
+            return true;
+        }
+        return false;        
+    }
+    
     return {
         init : init,
         getWeapon : getWeapon,
@@ -52,5 +64,6 @@ var Player = (function()
         getHPCur : getHPCur,
         getHPMax : getHPMax,
         heal : heal,
+        damage : damage,
     }
 }());
