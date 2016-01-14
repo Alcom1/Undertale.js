@@ -41,6 +41,12 @@ var Soul = (function()
         Sound.playSound("flash", true);
     }
     
+    //Reset the soul.
+    function reset()
+    {
+        pos = new Vect(310, 309, 0);
+    }
+    
     //Update the player soul.
     function update(dt)
     {
@@ -122,6 +128,7 @@ var Soul = (function()
     function drawAt(ctx, posForced)
     {
         ctx.save();
+        ctx.globalAlpha = 1;
         ctx.drawImage(
             sprite,
             posForced.x,
@@ -225,6 +232,7 @@ var Soul = (function()
     return{
         init : init,
         setup : setup,
+        reset : reset,
         update : update,
         getOpacity : getOpacity,
         draw : draw,

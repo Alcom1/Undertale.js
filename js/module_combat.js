@@ -206,6 +206,7 @@ var Combat = (function()
 				Soul.limit(Bbox.getBound());
                 if(Cgroup.getDefends().update(dt))
                 {
+                    Soul.reset();
                     Bbox.setSize(574, 140, false);
                     combatState = COMBAT_STATE.MAIN;
                 }
