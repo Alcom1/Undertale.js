@@ -18,6 +18,7 @@ var main =
 	gameState : undefined,
 	GAME_STATE: Object.freeze
 	({
+        FLASH : 0,
 		COMBAT : 1,
 	}),
 	
@@ -37,13 +38,10 @@ var main =
 		this.ctx.imageSmoothingEnabled = false;
         
         //Game State
-        this.gameState = this.GAME_STATE.COMBAT;
+        this.gameState = this.GAME_STATE.FLASH;
         
         //Setup combat module.
-        Combat.setup(
-            this.ctx, 
-            20, 
-            20);
+        Combat.setup(this.ctx);
 		
 		// start the game loop
 		this.frame();
@@ -89,6 +87,10 @@ var main =
 	{
         switch(this.gameState)
         {
+            case this.GAME_STATE.FLASH:
+                if(Flash.update(dt))
+                    this.gameState = this.GAME_STATE.COMBAT;
+                break;
             case this.GAME_STATE.COMBAT:
                 Combat.update(dt);
                 break;
@@ -100,6 +102,9 @@ var main =
 	{
         switch(this.gameState)
         {
+            case this.GAME_STATE.FLASH:
+                Flash.draw(ctx);
+                break;
             case this.GAME_STATE.COMBAT:
                 Combat.draw(ctx);
                 break;

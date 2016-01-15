@@ -14,9 +14,8 @@ var Combat = (function()
         EFFECT : 5,   //State where the player gets to see the impact of their decisive actions.
         RESPOND: 6,   //State where the player gets responded to by the enemy group.  
         DEFEND : 7,   //State where the player defends themself.
-        FLASH : 8,    //State where the player's flash animation occurs, before the combat sequence begins.
-        DEATH : 9,    //State where the player's death animation occurs, after death.
-        NAME : 10     //State where the player selects an enemy by name.
+        DEATH : 8,    //State where the player's death animation occurs, after death.
+        NAME : 9      //State where the player selects an enemy by name.
 	});
     
 	var menuState;
@@ -30,24 +29,18 @@ var Combat = (function()
     
     var selectStateEnemy;  //Index of currently selected enemy.
     var selectStateOther;  //Index of currently selected anything else.
-    var startPos;          //Starting position 
-    
 	
 	//Init
 	function init()
 	{
         //Initial states for combat
-        combatState = COMBAT_STATE.FLASH;
+        combatState = COMBAT_STATE.MAIN;
         menuState = MENU_STATE.FIGHT;
         selectStateEnemy = 0;
         selectStateOther = 0;
         
         //Bullet box
         Bbox.setup(new Vect(320, 320, 0), 574, 140);
-        
-        //Soul
-        startPos = new Vect(310, 309, 0);
-        Soul.setup(startPos);
 	}
     
     //Initialize with provided canvas.
@@ -218,13 +211,6 @@ var Combat = (function()
                 }
                 break;
                 
-            case COMBAT_STATE.FLASH:
-                if(Soul.update(dt))
-                {
-                    combatState = COMBAT_STATE.MAIN;
-                }
-                break;
-                
             case COMBAT_STATE.DEATH:
                 break;
                 
@@ -338,10 +324,6 @@ var Combat = (function()
                 Cmenu.draw(ctx, 0, MENU_STATE);
                 Cgroup.getDefends().draw(ctx);
 				Soul.checkCollision(ctx);
-				Soul.draw(ctx);
-                break;
-                
-            case COMBAT_STATE.FLASH:
 				Soul.draw(ctx);
                 break;
                 

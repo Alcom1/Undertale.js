@@ -15,6 +15,7 @@ window.onload = function()
 	console.log("window.onload called");
     
     //Non-main modules.
+    Flash.init();
     Player.init();
     Inventory.init();
     Soul.init();
