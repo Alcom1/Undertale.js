@@ -6,10 +6,12 @@ var Cattack = (function()
     var attackState;    //State of the attack.
     var ATTACK_STATE = Object.freeze(
     {
-        HIT : 0,        //State when dealing damage.
-        SMASH : 1,      //State when showing smash effect.
-        DAMAGE : 2,     //State when displaying damage.
-        DELAY : 3,      //Delay after everything else is done.
+        HIT : 0,            //State when dealing damage.
+        SMASH : 1,          //State when showing smash effect.
+        DAMAGE : 2,         //State when displaying damage.
+        DAMAGENO : 3,       //State when displaying 0 damage.
+        DELAY : 4,          //Delay after everything else is done.
+        DELAYNO : 5,        //Delay after everything else is done.
     });
     
     var attackBars;             //Bars representing each attack.
@@ -64,7 +66,7 @@ var Cattack = (function()
                 if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     //Attack
-                    var hit = attackBars[0];                                         //Hit at attack bar position.
+                    var hit = attackBars[0];                             //Hit at attack bar position.
                     var damage = Math.max(0, 282 - Math.abs(hit - 312)); //Damage based on hit.
                     if(damage > 280)            //Crit
                     {
@@ -121,19 +123,28 @@ var Cattack = (function()
                 }
                 if(delayCounter > delay)
                 {
-                    totalDamage = totalDamage.toString();
-                    for(var i = 0; i < totalDamage.length; i++)
+                    if(totalDamage > 0)
                     {
-                        if(totalDamage.charAt(i) == 1)
-                            healthTextPos.x -= 10;
-                        else
-                            healthTextPos.x -= 16;
+                        totalDamage = totalDamage.toString();
+                        for(var i = 0; i < totalDamage.length; i++)
+                        {
+                            if(totalDamage.charAt(i) == 1)
+                                healthTextPos.x -= 10;
+                            else
+                                healthTextPos.x -= 16;
+                        }
+                        Cgroup.dealDamage(Combat.getSelectStateEnemy(), totalDamage);
+                        Sound.playSound("impact", true);
+                        attackState = ATTACK_STATE.DAMAGE;
                     }
-                    Cgroup.dealDamage(Combat.getSelectStateEnemy(), totalDamage);
-                    Sound.playSound("impact", true);
-                    attackState = ATTACK_STATE.DAMAGE
+                    else
+                    {
+                        healthTextPos.x -= 59;
+                        attackState = ATTACK_STATE.DAMAGENO;
+                    }
                 }
                 break;
+            case ATTACK_STATE.DAMAGENO:
             case ATTACK_STATE.DAMAGE:
                 healthTextVel += healthTextAcc * dt;
                 healthTextPos.y += healthTextVel * dt;
@@ -153,10 +164,19 @@ var Cattack = (function()
                 if(healthTemp <= Cgroup.getCurHP(Combat.getSelectStateEnemy()) && !healthTextAcc)
                 {
                     delayCounter = 0;
-                    delay = .5;
-                    attackState = ATTACK_STATE.DELAY;
+                    if(totalDamage > 0)
+                    {
+                        attackState = ATTACK_STATE.DELAY;
+                        delay = .5;
+                    }
+                    else
+                    {
+                        attackState = ATTACK_STATE.DELAYNO;
+                        delay = .25;
+                    }
                 }
                 break;
+            case ATTACK_STATE.DELAYNO:
             case ATTACK_STATE.DELAY:
                 delayCounter += dt;
                 if(delayCounter > delay)
@@ -257,6 +277,13 @@ var Cattack = (function()
                         subPos.x += 32;
                     }
                 }
+                break;
+            case ATTACK_STATE.DELAYNO:
+            case ATTACK_STATE.DAMAGENO:
+                ctx.drawImage(
+                    document.getElementById("miss"),
+                    healthTextPos.x, 
+                    healthTextPos.y);
                 break;
         }
         
