@@ -61,6 +61,8 @@ var Combat = (function()
     //Update
 	function update(dt)
 	{
+        Cgroup.update(dt);
+        
         //Seperate as to ensure that the soul finishes updating.
         if(combatState != COMBAT_STATE.FLASH)
         {
@@ -245,6 +247,8 @@ var Combat = (function()
     //Draw
 	function draw(ctx)
 	{
+        Cgroup.draw(ctx);
+        
         //States for the combat sequence.
         switch(combatState)
         {

@@ -36,6 +36,12 @@ Number.prototype.mod = function(n)
 	return ((this % n) + n) % n;
 }
 
+//Maps x within range a-b to range c-d
+function map(x, a, b, c, d)
+{
+    return (x - a) / (b - a) * (d - c) + c;
+}
+
 //Canvas rounded rectangle.
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r)
 {

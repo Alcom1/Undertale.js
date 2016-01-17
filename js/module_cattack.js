@@ -9,9 +9,9 @@ var Cattack = (function()
         HIT : 0,            //State when dealing damage.
         SMASH : 1,          //State when showing smash effect.
         DAMAGE : 2,         //State when displaying damage.
-        DAMAGENO : 3,       //State when displaying 0 damage.
+        DAMAGEMISS : 3,     //State when displaying 0 damage.
         DELAY : 4,          //Delay after everything else is done.
-        DELAYNO : 5,        //Delay after everything else is done.
+        DELAYMISS : 5,      //Delay after everything else is done.
     });
     
     var attackBars;             //Bars representing each attack.
@@ -140,11 +140,11 @@ var Cattack = (function()
                     else
                     {
                         healthTextPos.x -= 59;
-                        attackState = ATTACK_STATE.DAMAGENO;
+                        attackState = ATTACK_STATE.DAMAGEMISS;
                     }
                 }
                 break;
-            case ATTACK_STATE.DAMAGENO:
+            case ATTACK_STATE.DAMAGEMISS:
             case ATTACK_STATE.DAMAGE:
                 healthTextVel += healthTextAcc * dt;
                 healthTextPos.y += healthTextVel * dt;
@@ -171,12 +171,12 @@ var Cattack = (function()
                     }
                     else
                     {
-                        attackState = ATTACK_STATE.DELAYNO;
+                        attackState = ATTACK_STATE.DELAYMISS;
                         delay = .25;
                     }
                 }
                 break;
-            case ATTACK_STATE.DELAYNO:
+            case ATTACK_STATE.DELAYMISS:
             case ATTACK_STATE.DELAY:
                 delayCounter += dt;
                 if(delayCounter > delay)
@@ -278,8 +278,8 @@ var Cattack = (function()
                     }
                 }
                 break;
-            case ATTACK_STATE.DELAYNO:
-            case ATTACK_STATE.DAMAGENO:
+            case ATTACK_STATE.DELAYMISS:
+            case ATTACK_STATE.DAMAGEMISS:
                 ctx.drawImage(
                     document.getElementById("miss"),
                     healthTextPos.x, 
