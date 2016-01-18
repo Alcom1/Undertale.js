@@ -1,16 +1,17 @@
 //Enemy object
 var Cenemy = function(pos)
 {
-    this.name = "enemy";
-    this.texts = ["* |#FF0JavaScript|#FFF is a high-level,  dynamic,  \nuntyped,  and interpreted programming \nlanguage.  -Wikipedia"];
+    this.name = "Utah Teapot";
+    this.texts = ["* Teapots?", "* |#FF0JavaScript|#FFF is a high-level,  dynamic,  \nuntyped,  and interpreted programming \nlanguage.  -Wikipedia"];
     this.speech = ["Null", "Beep.", "Boop."];
-    this.acts = ["Check", "Beep", "Boop"];
-    this.ress = ["* Checking.", "* Beep.", "* Boop."];
+    this.acts = ["Check"];
+    this.ress = ["* Utah Teapot 3 ATK 7 DEF * Likes to test shaders in its free \ntime."];
     this.atk = 5;
     this.def = 5;
     this.maxHP = 200;
     this.curHP = 200;
     this.defense = 10;
+    this.damageVel = 120;
     this.damagePos = pos;
     this.active = false;
 }

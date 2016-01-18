@@ -1,4 +1,4 @@
-// Combat attack module.
+// Combat attack module. Manages the player's attack and subsequent events before a response.
 var Cattack = (function()
 {
     var attackBox;      //Display for attack.
@@ -6,12 +6,12 @@ var Cattack = (function()
     var attackState;    //State of the attack.
     var ATTACK_STATE = Object.freeze(
     {
-        HIT : 0,            //State when dealing damage.
+        HIT : 0,            //State when attacking.
         SMASH : 1,          //State when showing smash effect.
         DAMAGE : 2,         //State when displaying damage.
         DAMAGEMISS : 3,     //State when displaying 0 damage.
         DELAY : 4,          //Delay after everything else is done.
-        DELAYMISS : 5,      //Delay after everything else is done.
+        DELAYMISS : 5,      //Delay after everything else is done and damage is 0.
     });
     
     var attackBars;             //Bars representing each attack.
@@ -21,13 +21,13 @@ var Cattack = (function()
     var delayCounter;           //Counter for duration delay.
     var delay;                  //Duration delay.
     
-    var healthTemp;
-    var healthBarPos;
-    var healthBarWidth;
-    var healthBarVel;
-    var healthTextPos;
-    var healthTextVel;
-    var healthTextAcc;
+    var healthTemp;             //Temporary health value displayed on healthbar.
+    var healthBarPos;           //Position of the health bar.
+    var healthBarWidth;         //Width of the health bar.
+    var healthBarVel;           //Velocity (Actually speed, but whatever) that the health bar shrinks at.
+    var healthTextPos;          //Position of damage text.
+    var healthTextVel;          //Velocity of the damage text.
+    var healthTextAcc;          //Acceleration of the damage text because of Parabolas'n'stuff.
     
     //Init
     function init()
@@ -38,6 +38,7 @@ var Cattack = (function()
     //Setup
     function setup()
     {
+        //Set attack bars.
         attackBars = [37, 0 - Math.random() * 75];                  //First two attack bars.
         attackBars.push(attackBars[1] - 30 - Math.random() * 75);   //Second attack bar based on the first.
         attackFades = [];
@@ -45,11 +46,12 @@ var Cattack = (function()
         attackBoxOpacity = 1;
         totalDamage = 0; 
         
+        //Set health bar and text parameters based on current selected enemy and defaults.
         healthTemp = Cgroup.getCurHP(Combat.getSelectStateEnemy());
         healthBarWidth = Cgroup.getMaxHP(Combat.getSelectStateEnemy());
         healthBarPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get(); 
         healthBarPos.x -= healthBarWidth / 2;
-        healthBarVel = 70;
+        healthBarVel = Cgroup.getDamageVel(Combat.getSelectStateEnemy());
         healthTextPos = Cgroup.getDamagePos(Combat.getSelectStateEnemy()).get();
         healthTextPos.y -= 32;
         healthTextVel = -160;
@@ -62,26 +64,24 @@ var Cattack = (function()
         switch(attackState)
         {
             case ATTACK_STATE.HIT:
-                //Z button to deal an attack. Attacks are based on and consume an attack bar.
+                //Z button deals an attack and consumes an attack bar.
                 if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     //Attack
-                    var hit = attackBars[0];                             //Hit at attack bar position.
+                    var hit = attackBars[0];                             //Bar position when hit occurs.
                     var damage = Math.max(0, 282 - Math.abs(hit - 312)); //Damage based on hit.
-                    if(damage > 280)            //Crit
+                    if(damage > 280)    //Crit
                     {
-                        damage *= 1.5;          //Crit multiplier
-                        attackFades.push([hit, 1, 1]);
+                        damage *= 1.5;                  //Crit multiplier
+                        attackFades.push([hit, 1, 1]);  //Add a crit fade effect.
                     }
-                    else                        //Normal hit
+                    else                //Normal hit
                     {
-                        attackFades.push([hit, 0, 1]);
+                        attackFades.push([hit, 0, 1]);  //Add a normal fade effect.
                     }
-                    damage = Math.floor(damage);
-                    
-                    totalDamage += damage;      //Increment damage
-                    
-                    attackBars.splice(0, 1);    //Remove the consumed attack bar.
+                    damage = Math.floor(damage);        //Damage to int.
+                    totalDamage += damage;              //Increment damage
+                    attackBars.splice(0, 1);            //Remove the consumed attack bar.
                     
                     //Sfx for attack.
                     if(attackBars.length > 0)
@@ -100,12 +100,12 @@ var Cattack = (function()
                     }
                 }
                 
-                //Go to damage state if no attacks are left or if the attacks are beyond the canvas.
+                //Next state if no attacks are left or if the attacks are beyond the canvas.
                 if(attackBars.length < 1 || attackBars[attackBars.length - 1] > 640)
                 {      
                     delayCounter = 0;
                     delay = 1.2;
-                    attackState = ATTACK_STATE.SMASH;
+                    attackState = ATTACK_STATE.SMASH;   //Next state.
                 }
                 
                 //Update attack bar positions.
@@ -115,16 +115,21 @@ var Cattack = (function()
                 }
                 break;
             case ATTACK_STATE.SMASH:
+                //Attack box opacity fade out
                 attackBoxOpacity -= 2 * dt; //Fade out the attack box.
-                delayCounter += dt;
                 if(attackBoxOpacity < 0)    //Force attack box opacity to be 0 once it reaches 0.
                 {
                     attackBoxOpacity = 0;
                 }
+                
+                //Duration
+                delayCounter += dt;
                 if(delayCounter > delay)
                 {
+                    //Damage dealth, no MISS
                     if(totalDamage > 0)
                     {
+                        //Set damage text.
                         totalDamage = totalDamage.toString();
                         for(var i = 0; i < totalDamage.length; i++)
                         {
@@ -133,10 +138,11 @@ var Cattack = (function()
                             else
                                 healthTextPos.x -= 16;
                         }
-                        Cgroup.dealDamage(Combat.getSelectStateEnemy(), totalDamage);
-                        Sound.playSound("impact", true);
-                        attackState = ATTACK_STATE.DAMAGE;
+                        Cgroup.dealDamage(Combat.getSelectStateEnemy(), totalDamage);   //Deal damage.
+                        Sound.playSound("impact", true);                                //SFX.
+                        attackState = ATTACK_STATE.DAMAGE;                              //Next state.
                     }
+                    //MISS
                     else
                     {
                         healthTextPos.x -= 59;
@@ -146,6 +152,7 @@ var Cattack = (function()
                 break;
             case ATTACK_STATE.DAMAGEMISS:
             case ATTACK_STATE.DAMAGE:
+                //Move text.
                 healthTextVel += healthTextAcc * dt;
                 healthTextPos.y += healthTextVel * dt;
                 if(healthTextPos.y > healthBarPos.y - 32 && healthTextVel > 0)
@@ -155,29 +162,32 @@ var Cattack = (function()
                     healthTextAcc = 0;
                 }
                 
+                //Move healthbar.
                 healthTemp -= healthBarVel * dt;    
                 if(healthTemp < Cgroup.getCurHP(Combat.getSelectStateEnemy()))
                 {
                     healthTemp = Cgroup.getCurHP(Combat.getSelectStateEnemy());
                 }
                 
+                //Go to next state if health bar stopped decreasing and text not accelerating/moving.
                 if(healthTemp <= Cgroup.getCurHP(Combat.getSelectStateEnemy()) && !healthTextAcc)
                 {
                     delayCounter = 0;
                     if(totalDamage > 0)
                     {
-                        attackState = ATTACK_STATE.DELAY;
+                        attackState = ATTACK_STATE.DELAY;       //Next state.
                         delay = .5;
                     }
                     else
                     {
-                        attackState = ATTACK_STATE.DELAYMISS;
+                        attackState = ATTACK_STATE.DELAYMISS;   //Next state.
                         delay = .25;
                     }
                 }
                 break;
             case ATTACK_STATE.DELAYMISS:
             case ATTACK_STATE.DELAY:
+                //Return true after delay, return false otherwise.
                 delayCounter += dt;
                 if(delayCounter > delay)
                 {
@@ -240,9 +250,11 @@ var Cattack = (function()
                 }
                 break;
             case ATTACK_STATE.SMASH:
+                //Something will be drawn here, eventually.
                 break;
             case ATTACK_STATE.DELAY:
             case ATTACK_STATE.DAMAGE:
+                //Draw health bar back.
                 ctx.fillStyle = "#404040";
                 ctx.strokeStyle = "#000";
                 ctx.lineWidth = 1;
@@ -254,12 +266,14 @@ var Cattack = (function()
                     15);
                 ctx.fill();
                 ctx.stroke();
+                //Draw health bar front.
                 ctx.fillStyle = "#0F0";
                 ctx.fillRect(
                     healthBarPos.x - .5,
                     healthBarPos.y - .5,
                     healthTemp,
                     15);
+                //Draw damage text.
                 var subPos = healthTextPos.get();
                 for(var i = 0; i < totalDamage.length; i++)
                 {
@@ -280,6 +294,7 @@ var Cattack = (function()
                 break;
             case ATTACK_STATE.DELAYMISS:
             case ATTACK_STATE.DAMAGEMISS:
+                //Draw miss.
                 ctx.drawImage(
                     document.getElementById("miss"),
                     healthTextPos.x, 

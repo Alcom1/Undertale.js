@@ -9,7 +9,7 @@ var Inventory = (function()
         [
             new Item(
                 "Food.js", 
-                "* Test item sentence. 10 health restored.",
+                "* Test item sentence.\n10 health restored.",
                 function(){Player.heal(10)}),
         ]
     }

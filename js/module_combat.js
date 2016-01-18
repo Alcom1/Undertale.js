@@ -49,7 +49,7 @@ var Combat = (function()
 		Soul.getCollision(ctx);   //Form collision data for player.
         
         Cwriter.setTimes(
-            .75,
+            .50,
             .33,
             .21,
             .033);

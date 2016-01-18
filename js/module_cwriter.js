@@ -54,7 +54,7 @@ var Cwriter = (function()
     {
         text = _text;
         charCounter = -1;           //Counter for the index of the most recent displayed character.
-        timeCounter = timeAsterisk; //Counter for the time since a character was placed.        
+        timeCounter = 0;            //Counter for the time since a character was placed.        
     }
     
     //Update the writer.
@@ -76,32 +76,45 @@ var Cwriter = (function()
             charCounter++;
             
             //SFX
-            
-            //Change interval for new character.
-            switch(text.charAt(charCounter))
+            if(charCounter < text.length - 2)
             {
-                case ".":
-                    Sound.pauseSound("text", 70); 
-                    timeCheck = timePeriod;
-                    break;
-                case ",":
-                    Sound.pauseSound("text", 70); 
-                    timeCheck = timeComma;
-                    break;
-                case "*":
-                    timeCheck = timeAsterisk;
-                    break;
-                default:
-                    Sound.playSound("text", false); 
-                    timeCheck = timeStandard;
-                    break;
+                //Change interval for new character.
+                switch(text.charAt(charCounter + 1))
+                {
+                    case ".":
+                        Sound.pauseSound("text", 70); 
+                        timeCheck = timePeriod;
+                        break;
+                    case "?":
+                        Sound.pauseSound("text", 70); 
+                        timeCheck = timePeriod;
+                        break;
+                    case ",":
+                        Sound.pauseSound("text", 70); 
+                        timeCheck = timeComma;
+                        break;
+                    case "*":
+                        Sound.pauseSound("text", 70); 
+                        timeCheck = timeAsterisk;
+                        break;
+                    default:
+                        Sound.playSound("text", false); 
+                        timeCheck = timeStandard;
+                        break;
+                }
             }
+            else
+            {
+                Sound.playSound("text", false); 
+                timeCheck = timeStandard;
+            }
+            
         }
         
         if(charCounter >= text.length - 1)
         {
             Sound.pauseSoundHard("text"); 
-        }        
+        }  
     }
     
     //Draw text.
@@ -150,7 +163,7 @@ var Cwriter = (function()
             }
             else                                //Next-char moveover.
             {
-                textXPos += ctx.measureText(text.charAt(i)).width;
+                textXPos += ctx.measureText(text.charAt(i)).width + 2;
             }
         }
         
@@ -241,7 +254,7 @@ var Cwriter = (function()
         xPos += 32;
         
         //Draw characters.
-        for(var i = 0; i < text.length; i++)
+        for(var i = 0; i < option.length; i++)
         { 
             if(option.charAt(i) == "|")
             {

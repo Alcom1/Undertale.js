@@ -48,6 +48,16 @@ Cdefend.prototype.draw = function(ctx)
         305,
         40,
         40);
+    ctx.rect(
+        -40 + 74 * this.durationCounter,
+        305,
+        40,
+        40);
+    ctx.rect(
+        -40 + 74 * this.durationCounter,
+        265,
+        40,
+        40);
     ctx.fill();
     ctx.stroke();
     ctx.restore(); 
