@@ -9,8 +9,8 @@ var Soul = (function()
     var speed;			//Soul speed on bullet board.
     var colData;    	//Collision data
     
-    var soulState;
-    var SOUL_STATE = Object.freeze(
+    var state;
+    var STATE = Object.freeze(
     {
         OKAY : 0,
         DAMAGED : 1,
@@ -34,7 +34,7 @@ var Soul = (function()
     function setup(_pos)
     {
         pos = _pos;
-        soulState = SOUL_STATE.FLASH;
+        state = STATE.FLASH;
         delayCounter = 0;
         delay = .4;
         speed = 100;
@@ -45,30 +45,31 @@ var Soul = (function()
     function reset()
     {
         pos = new Vect(310, 309, 0);
+        state = STATE.OKAY;
     }
     
     //Update the player soul.
     function update(dt)
     {
-        switch(soulState)
+        switch(state)
         {
-            case SOUL_STATE.DAMAGED:
+            case STATE.DAMAGED:
                 delayCounter += dt;
                 if(delayCounter > delay)
                 {
-                    soulState = SOUL_STATE.OKAY;
+                    state = STATE.OKAY;
                 }
                 break;
-            case SOUL_STATE.FLASH:
+            case STATE.FLASH:
                 delayCounter += dt;
                 if(delayCounter > delay)
                 {
                     delayCounter = 0;
                     delay = 2;
-                    soulState = SOUL_STATE.TRANSITION;
+                    state = STATE.TRANSITION;
                 }
                 break;
-            case SOUL_STATE.TRANSITION:
+            case STATE.TRANSITION:
                 delayCounter += dt;
                 pos.add(pos.getSub(new Vect(40, 446, 0)).getNorm().getMult(-400 * dt));
                 if(pos.x < 40)
@@ -76,15 +77,15 @@ var Soul = (function()
                     pos = new Vect(310, 309, 0);
                     delayCounter = 0;
                     delay = .5;
-                    soulState = SOUL_STATE.FADEIN;
+                    state = STATE.FADEIN;
                     return true;
                 }
                 break;
-            case SOUL_STATE.FADEIN:
+            case STATE.FADEIN:
                 delayCounter += dt;
                 if(delayCounter > delay)
                 {
-                    soulState = SOUL_STATE.OKAY;
+                    state = STATE.OKAY;
                 }
                 return true;
         }
@@ -102,15 +103,15 @@ var Soul = (function()
     function draw(ctx)
     {
         ctx.save();
-        switch(soulState)
+        switch(state)
         {
-            case SOUL_STATE.OKAY:
+            case STATE.OKAY:
                 ctx.drawImage(
                     sprite,
                     pos.x,
                     pos.y);
                 break;
-            case SOUL_STATE.DAMAGED:
+            case STATE.DAMAGED:
                 if(Math.floor(delayCounter * 5) % 2)
                 {
                     ctx.drawImage(
@@ -126,12 +127,12 @@ var Soul = (function()
                         pos.y);
                 }
                 break;
-            case SOUL_STATE.FLASH:
+            case STATE.FLASH:
                 if(Math.floor(delayCounter * 50) % 5 > 2)
                 {
                     break;
                 }
-            case SOUL_STATE.TRANSITION:
+            case STATE.TRANSITION:
                 ctx.drawImage(
                     spriteOver,
                     pos.x,
@@ -182,7 +183,7 @@ var Soul = (function()
     //Check collision for player
     function checkCollision(ctx)
     {
-        if(soulState == SOUL_STATE.OKAY)
+        if(state == STATE.OKAY)
         {
             //Get image data at player position (Hopefully before the player is drawn).
             var imgData = ctx.getImageData(
@@ -200,7 +201,7 @@ var Soul = (function()
                     delayCounter = 0;
                     delay = 4;
                     Player.damage(4);
-                    soulState = SOUL_STATE.DAMAGED;
+                    state = STATE.DAMAGED;
                     return;
                 }
             }

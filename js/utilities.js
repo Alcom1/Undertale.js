@@ -43,7 +43,7 @@ function map(x, a, b, c, d)
 }
 
 //Canvas rounded rectangle.
-CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r)
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r, d)
 {
     if (w < 2 * r)
         r = w / 2;
@@ -54,6 +54,9 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r)
     this.arcTo(x+w, y,   x+w, y+h, r);
     this.arcTo(x+w, y+h, x,   y+h, r);
     this.arcTo(x,   y+h, x,   y,   r);
+    this.lineTo(x, y + 10 + d);
+    this.lineTo(x - 12, y + 5 + d);
+    this.lineTo(x, y + d);
     this.arcTo(x,   y,   x+w, y,   r);
     this.closePath();
     return this;

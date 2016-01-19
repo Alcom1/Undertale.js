@@ -7,7 +7,7 @@ var Cdefend = function()
 Cdefend.prototype.setup = function()
 {
     this.durationCounter = 0;
-    this.duration = 5;
+    this.duration = 5.35;
 }
 
 Cdefend.prototype.update = function(dt)
@@ -49,12 +49,12 @@ Cdefend.prototype.draw = function(ctx)
         40,
         40);
     ctx.rect(
-        -40 + 74 * this.durationCounter,
+        -36 + 70 * this.durationCounter,
         305,
         40,
         40);
     ctx.rect(
-        -40 + 74 * this.durationCounter,
+        -36 + 70 * this.durationCounter,
         265,
         40,
         40);

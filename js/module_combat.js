@@ -135,6 +135,7 @@ var Combat = (function()
             	if(Cattack.update(dt))
                 {
                     combatState = COMBAT_STATE.RESPOND;
+                    Cbubble.setup();
                     Bbox.setSize(Cgroup.getDefends().width, Cgroup.getDefends().height, false);
                     Cgroup.getDefends().setup();
                     Cwriter.reset();
@@ -187,6 +188,7 @@ var Combat = (function()
                 if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = COMBAT_STATE.RESPOND;
+                    Cbubble.setup();
                     Bbox.setSize(Cgroup.getDefends().width, Cgroup.getDefends().height, false);
                     Cgroup.getDefends().setup();
                     Cwriter.setText(Cgroup.getText());
@@ -195,7 +197,7 @@ var Combat = (function()
                 break;
             
             case COMBAT_STATE.RESPOND:
-                if(Bbox.update(dt))
+                if(Bbox.update(dt) && Cbubble.update(dt) && myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = COMBAT_STATE.DEFEND;
                 }
@@ -320,6 +322,7 @@ var Combat = (function()
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
 				Soul.draw(ctx);
+                Cbubble.draw(ctx);
                 break;
                 
             case COMBAT_STATE.DEFEND:

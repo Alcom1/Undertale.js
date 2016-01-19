@@ -99,6 +99,16 @@ var Cgroup = (function()
     {
         return enemies[selectStateEnemy].curHP;
     }
+    
+    function getBubblePos(selectStateEnemy)
+    {
+        return enemies[selectStateEnemy].bubblePos;
+    }
+    
+    function getBubbleOff(selectStateEnemy)
+    {
+        return enemies[selectStateEnemy].bubbleOff;
+    }
 
     function getMercies()
     {
@@ -132,6 +142,8 @@ var Cgroup = (function()
         getDamageVel : getDamageVel,
         getMaxHP : getMaxHP,
         getCurHP : getCurHP,
+        getBubblePos : getBubblePos,
+        getBubbleOff : getBubbleOff,
         getMercies : getMercies,
         dealDamage : dealDamage,
     }

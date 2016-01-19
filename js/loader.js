@@ -21,6 +21,7 @@ window.onload = function()
     Soul.init();
     Bbox.init();
     Cwriter.init();
+    Cbubble.init();
     Cattack.init();
     Chp.init();
     Cmenu.init();

@@ -13,6 +13,8 @@ var Cenemy = function(pos)
     this.defense = 10;
     this.damageVel = 120;
     this.damagePos = pos;
+    this.bubblePos = pos.getAdd(new Vect(80, -80, 0));
+    this.bubbleOff = 30;
     this.active = false;
 }
 
