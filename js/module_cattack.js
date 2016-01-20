@@ -18,8 +18,8 @@ var Cattack = (function()
     var attackFades;            //Bars representing each fade effect where an attack occured.
     var attackBoxOpacity;       //Opacity of the attack box visual.
     var totalDamage;            //Total damage dealt by attacks.
-    var delayCounter;           //Counter for duration delay.
-    var delay;                  //Duration delay.
+    var durationCounter;        //Counter for duration duration.
+    var duration;               //Duration duration.
     
     var healthTemp;             //Temporary health value displayed on healthbar.
     var healthBarPos;           //Position of the health bar.
@@ -103,8 +103,8 @@ var Cattack = (function()
                 //Next state if no attacks are left or if the attacks are beyond the canvas.
                 if(attackBars.length < 1 || attackBars[attackBars.length - 1] > 640)
                 {      
-                    delayCounter = 0;
-                    delay = 1.2;
+                    durationCounter = 0;
+                    duration = 1.2;
                     attackState = ATTACK_STATE.SMASH;   //Next state.
                 }
                 
@@ -123,8 +123,8 @@ var Cattack = (function()
                 }
                 
                 //Duration
-                delayCounter += dt;
-                if(delayCounter > delay)
+                durationCounter += dt;
+                if(durationCounter > duration)
                 {
                     //Damage dealth, no MISS
                     if(totalDamage > 0)
@@ -172,24 +172,24 @@ var Cattack = (function()
                 //Go to next state if health bar stopped decreasing and text not accelerating/moving.
                 if(healthTemp <= Cgroup.getCurHP(Combat.getSelectStateEnemy()) && !healthTextAcc)
                 {
-                    delayCounter = 0;
+                    durationCounter = 0;
                     if(totalDamage > 0)
                     {
                         attackState = ATTACK_STATE.DELAY;       //Next state.
-                        delay = .5;
+                        duration = .5;
                     }
                     else
                     {
                         attackState = ATTACK_STATE.DELAYMISS;   //Next state.
-                        delay = .25;
+                        duration = .25;
                     }
                 }
                 break;
             case ATTACK_STATE.DELAYMISS:
             case ATTACK_STATE.DELAY:
-                //Return true after delay, return false otherwise.
-                delayCounter += dt;
-                if(delayCounter > delay)
+                //Return true after duration, return false otherwise.
+                durationCounter += dt;
+                if(durationCounter > duration)
                 {
                     return true;   
                 }
@@ -335,7 +335,7 @@ var Cattack = (function()
         ctx.restore();       
     }
     
-    //Module return.
+    //Return
     return {
         init : init,
         setup : setup,

@@ -14,31 +14,19 @@ window.onload = function()
 {
 	console.log("window.onload called");
     
-    //Non-main modules.
+    //Modules.
     Flash.init();
     Player.init();
     Inventory.init();
     Soul.init();
-    Bbox.init();
+    Cbbox.init();
     Cwriter.init();
-    Cbubble.init();
     Cattack.init();
     Chp.init();
     Cmenu.init();
-    Cgroup.init();
 	Combat.init();
 	Sound.init(0.4);
 	
-	//Main module
+	//Main
 	main.init();
-}
-	
-window.onblur = function()
-{
-
-}
-
-window.onfocus = function()
-{
-
 }

@@ -1,10 +1,12 @@
+//Module that represents the player's attributes.
 var Player = (function()
 {
-    var weapon;
-    var armor;
-    var hpCur;
-    var hpMax;
+    var weapon;     //Currently equipped weapon.
+    var armor;      //Currently equipped armor.
+    var hpCur;      //Current HP
+    var hpMax;      //Maximum HP
     
+    //Init
     function init()
     {
         weapon = {};
@@ -13,26 +15,31 @@ var Player = (function()
         hpMax = 20;
     }
     
+    //Getter for weapon
     function getWeapon()
     {
         return weapon;
     }
     
+    //Getter for armor
     function getArmor()
     {
         return armor;
     }
     
+    //Getter for current HP
     function getHPCur()
     {
         return hpCur;
     }
     
+    //Getter for max HP
     function getHPMax()
     {
         return hpMax;
     }
     
+    //Heal the player. Returns true at full health.
     function heal(value)
     {
         Sound.playSound("heal", true);
@@ -45,6 +52,7 @@ var Player = (function()
         return false;        
     }
     
+    //Damage the player. Returns true at 0 health.
     function damage(value)
     {
         Sound.playSound("damage", true);
@@ -57,6 +65,7 @@ var Player = (function()
         return false;        
     }
     
+    //Return
     return {
         init : init,
         getWeapon : getWeapon,

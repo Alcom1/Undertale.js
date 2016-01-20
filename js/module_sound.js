@@ -1,4 +1,4 @@
-// Sound
+//Module that plays and manages sounds.
 var Sound = (function()
 {
 	console.log("sound.js module loaded");
@@ -15,6 +15,7 @@ var Sound = (function()
         }
 	}
     
+    //Update the sound module.
     function update()
     {
         if(pauser != undefined)
@@ -28,6 +29,7 @@ var Sound = (function()
         }
     }
     
+    //Play sound by ID and disrupt option.
     function playSound(id, disrupt)
     {
         var sound = document.querySelector("#" + id);
@@ -40,19 +42,21 @@ var Sound = (function()
         pauser = undefined;
     }
     
+    //Set a sound to be paused by its id and step length.
     function pauseSound(id, step)
     {
         step = 70;
         pauser = [id, step];
     }
     
+    //Pause a sound immediately.
     function pauseSoundHard(id)
     {
         document.querySelector("#" + id).pause();
         pauser = undefined;
     }
 	
-	// export a public interface to this module (Why does this need to be same line bracket?)
+	//Return
 	return {
 		init : init,
         update : update,

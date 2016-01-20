@@ -9,7 +9,7 @@ var Soul = (function()
     var speed;			//Soul speed on bullet board.
     var colData;    	//Collision data
     
-    var state;
+    var state;          //State of the player.
     var STATE = Object.freeze(
     {
         OKAY : 0,
@@ -19,8 +19,8 @@ var Soul = (function()
         FADEIN : 4,
     });
     
-    var delay;
-    var delayCounter;
+    var duration;           //Duration of soul states.
+    var durationCounter;    //Counter for duration.
     
     //Initialize the soul.
     function init()
@@ -35,8 +35,8 @@ var Soul = (function()
     {
         pos = _pos;
         state = STATE.FLASH;
-        delayCounter = 0;
-        delay = .4;
+        durationCounter = 0;
+        duration = .4;
         speed = 100;
         Sound.playSound("flash", true);
     }
@@ -54,36 +54,36 @@ var Soul = (function()
         switch(state)
         {
             case STATE.DAMAGED:
-                delayCounter += dt;
-                if(delayCounter > delay)
+                durationCounter += dt;
+                if(durationCounter > duration)
                 {
                     state = STATE.OKAY;
                 }
                 break;
             case STATE.FLASH:
-                delayCounter += dt;
-                if(delayCounter > delay)
+                durationCounter += dt;
+                if(durationCounter > duration)
                 {
-                    delayCounter = 0;
-                    delay = 2;
+                    durationCounter = 0;
+                    duration = 2;
                     state = STATE.TRANSITION;
                 }
                 break;
             case STATE.TRANSITION:
-                delayCounter += dt;
+                durationCounter += dt;
                 pos.add(pos.getSub(new Vect(40, 446, 0)).getNorm().getMult(-400 * dt));
                 if(pos.x < 40)
                 {
                     pos = new Vect(310, 309, 0);
-                    delayCounter = 0;
-                    delay = .5;
+                    durationCounter = 0;
+                    duration = .5;
                     state = STATE.FADEIN;
                     return true;
                 }
                 break;
             case STATE.FADEIN:
-                delayCounter += dt;
-                if(delayCounter > delay)
+                durationCounter += dt;
+                if(durationCounter > duration)
                 {
                     state = STATE.OKAY;
                 }
@@ -93,10 +93,10 @@ var Soul = (function()
         return false;
     }
     
-    //Gets an opacity value based on the current delay value
+    //Gets an opacity value based on the current duration value
     function getOpacity()
     {
-        return delayCounter * 4; 
+        return durationCounter * 4; 
     }
     
     //Draws the player soul.
@@ -112,7 +112,7 @@ var Soul = (function()
                     pos.y);
                 break;
             case STATE.DAMAGED:
-                if(Math.floor(delayCounter * 5) % 2)
+                if(Math.floor(durationCounter * 5) % 2)
                 {
                     ctx.drawImage(
                         spriteDmg,
@@ -128,7 +128,7 @@ var Soul = (function()
                 }
                 break;
             case STATE.FLASH:
-                if(Math.floor(delayCounter * 50) % 5 > 2)
+                if(Math.floor(durationCounter * 50) % 5 > 2)
                 {
                     break;
                 }
@@ -198,8 +198,8 @@ var Soul = (function()
                 //If non-black pixel is detected, set damage to true and return true.
                 if(imgData.data[colData[i]])
                 {
-                    delayCounter = 0;
-                    delay = 4;
+                    durationCounter = 0;
+                    duration = 4;
                     Player.damage(4);
                     state = STATE.DAMAGED;
                     return;
@@ -250,6 +250,7 @@ var Soul = (function()
         }
     }
     
+    //Return
     return{
         init : init,
         setup : setup,

@@ -1,9 +1,7 @@
-// Combat module
+//Combat module displays and manages the entire combat sequence.
 var Combat = (function()
 {
-	console.log("combat.js module loaded");
-    
-	var combatState;
+	var combatState;  //State of the combat sequence.
     var COMBAT_STATE = Object.freeze
 	({
 		MAIN : 0,     //Main state. State in which one of the four options is to be selected.
@@ -18,7 +16,7 @@ var Combat = (function()
         NAME : 9      //State where the player selects an enemy by name.
 	});
     
-	var menuState;
+	var menuState;    //Menu selection state.
     var MENU_STATE = Object.freeze
 	({
 		FIGHT : 1,    //Player has selected to fight.
@@ -40,20 +38,23 @@ var Combat = (function()
         selectStateOther = 0;
         
         //Bullet box
-        Bbox.setup(new Vect(320, 320, 0), 574, 140);
+        Cbbox.setup(574, 140);
+        
+        //Group setup
+        Cgroup.setup();
 	}
     
-    //Initialize with provided canvas.
+    //Setup with provided canvas.
     function setup(ctx)
     {
 		Soul.getCollision(ctx);   //Form collision data for player.
         
-        Cwriter.setTimes(
+        Cwriter.setupTimes(
             .50,
             .33,
             .21,
             .033);
-        Cwriter.setText(Cgroup.getText());
+        Cwriter.setupText(Cgroup.getText());
         
         Cattack.setup();
     }
@@ -73,7 +74,7 @@ var Combat = (function()
         switch(combatState)
         {
             case COMBAT_STATE.MAIN:
-                if(Bbox.update(dt))
+                if(Cbbox.update(dt))
                 {
                     Cwriter.update(dt);
                     
@@ -136,7 +137,7 @@ var Combat = (function()
                 {
                     combatState = COMBAT_STATE.RESPOND;
                     Cbubble.setup();
-                    Bbox.setSize(Cgroup.getDefends().width, Cgroup.getDefends().height, false);
+                    Cbbox.setSize(Cgroup.getDefends().width, Cgroup.getDefends().height, false);
                     Cgroup.getDefends().setup();
                     Cwriter.reset();
                 }
@@ -150,16 +151,16 @@ var Combat = (function()
                 }
                 if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
-                    Cwriter.setText(Cgroup.getRes(selectStateEnemy, selectStateOther));
+                    Cwriter.setupText(Cgroup.getRes(selectStateEnemy, selectStateOther));
                     combatState = COMBAT_STATE.EFFECT;   
                 }
-                selectStateOther = detectHorizontalSelect(Cgroup.getActs()[selectStateEnemy], selectStateOther);
+                selectStateOther = detectHorizontalSelect(Cgroup.getActs(selectStateEnemy), selectStateOther);
                 break;
                 
             case COMBAT_STATE.ITEM:
                 if(myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
-                    Cwriter.setText(Inventory.getText(selectStateOther));
+                    Cwriter.setupText(Inventory.getText(selectStateOther));
                     Inventory.activate(selectStateOther);
                     Inventory.removeItem(selectStateOther);
                     combatState = COMBAT_STATE.EFFECT;   
@@ -189,15 +190,15 @@ var Combat = (function()
                 {
                     combatState = COMBAT_STATE.RESPOND;
                     Cbubble.setup();
-                    Bbox.setSize(Cgroup.getDefends().width, Cgroup.getDefends().height, false);
+                    Cbbox.setSize(Cgroup.getDefends().width, Cgroup.getDefends().height, false);
                     Cgroup.getDefends().setup();
-                    Cwriter.setText(Cgroup.getText());
+                    Cwriter.setupText(Cgroup.getText());
                     Sound.pauseSound("text"); 
                 }
                 break;
             
             case COMBAT_STATE.RESPOND:
-                if(Bbox.update(dt) && Cbubble.update(dt) && myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
+                if(Cbbox.update(dt) && Cbubble.update(dt) && myKeys.keydown[myKeys.KEYBOARD.KEY_Z])
                 {
                     combatState = COMBAT_STATE.DEFEND;
                 }
@@ -206,11 +207,11 @@ var Combat = (function()
             case COMBAT_STATE.DEFEND:
                 Soul.update(dt);
 				Soul.move(dt);
-				Soul.limit(Bbox.getBound());
+				Soul.limit(Cbbox.getBound());
                 if(Cgroup.getDefends().update(dt))
                 {
                     Soul.reset();
-                    Bbox.setSize(574, 140, false);
+                    Cbbox.setSize(574, 140, false);
                     combatState = COMBAT_STATE.MAIN;
                 }
                 break;
@@ -257,7 +258,7 @@ var Combat = (function()
             case COMBAT_STATE.MAIN:
                 ctx.save();
                 ctx.globalAlpha = Soul.getOpacity();
-				Bbox.draw(ctx);
+				Cbbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, menuState, MENU_STATE);
                 Cwriter.drawText(ctx);
@@ -280,22 +281,22 @@ var Combat = (function()
                 break;
                 
             case COMBAT_STATE.FIGHT:
-				Bbox.draw(ctx);
+				Cbbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
                 Cattack.draw(ctx);
                 break;
                 
             case COMBAT_STATE.ACT:
-				Bbox.draw(ctx);
+				Cbbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
-                Cwriter.drawMenu(ctx, Cgroup.getActs()[selectStateEnemy], menuState, MENU_STATE);
+                Cwriter.drawMenu(ctx, Cgroup.getActs(selectStateEnemy), menuState, MENU_STATE);
 				Soul.drawAt(ctx, Cwriter.getSoulPos(selectStateOther, 0));
                 break;
                 
             case COMBAT_STATE.ITEM:
-				Bbox.draw(ctx);
+				Cbbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
                 Cwriter.drawMenu(ctx, Inventory.getNames(), menuState, MENU_STATE);
@@ -303,7 +304,7 @@ var Combat = (function()
                 break;
                 
             case COMBAT_STATE.MERCY:
-				Bbox.draw(ctx);
+				Cbbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
                 Cwriter.drawMenu(ctx, Cgroup.getMercies(), menuState, MENU_STATE);
@@ -311,14 +312,14 @@ var Combat = (function()
                 break;
             
             case COMBAT_STATE.EFFECT:
-				Bbox.draw(ctx);
+				Cbbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
                 Cwriter.drawText(ctx);
                 break;
                 
             case COMBAT_STATE.RESPOND:
-				Bbox.draw(ctx);
+				Cbbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
 				Soul.draw(ctx);
@@ -326,7 +327,7 @@ var Combat = (function()
                 break;
                 
             case COMBAT_STATE.DEFEND:
-				Bbox.draw(ctx);
+				Cbbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, 0, MENU_STATE);
                 Cgroup.getDefends().draw(ctx);
@@ -339,7 +340,7 @@ var Combat = (function()
                 break;
                 
             case COMBAT_STATE.NAME:
-				Bbox.draw(ctx);
+				Cbbox.draw(ctx);
 				Chp.draw(ctx, Player.getHPCur(), Player.getHPMax());
                 Cmenu.draw(ctx, menuState, MENU_STATE);
                 if(menuState == MENU_STATE.FIGHT)
@@ -423,7 +424,7 @@ var Combat = (function()
         return state;
     }
 	
-	// export a public interface to this module (Why does this need to be same line bracket?)
+	//Return
 	return {
 		init : init,
         setup : setup,

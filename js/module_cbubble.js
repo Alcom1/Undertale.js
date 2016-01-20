@@ -1,25 +1,24 @@
+//Module that displays the speech bubbles and text spoken by enemies.
 var Cbubble = (function()
 {
-    var delay;
-    var delayCounter;
+    var duration;          //Duration of events.
+    var durationCounter;   //Duration counter.
     
-    function init()
-    {
-        
-    }
-    
+    //Setup
     function setup()
     {
-        delay = 0;
-        delayCounter = 0;
+        duration = 0;
+        durationCounter = 0;
     }
     
+    //Update
     function update(dt)
     {
-        delayCounter += dt;
-        return delayCounter > delay;
+        durationCounter += dt;
+        return durationCounter > duration;
     }
     
+    //Draw
     function draw(ctx)
     {
         ctx.save();
@@ -38,8 +37,8 @@ var Cbubble = (function()
         ctx.restore();
     }
     
+    //Return
     return {
-        init : init,
         setup : setup,
         update : update,
         draw : draw,

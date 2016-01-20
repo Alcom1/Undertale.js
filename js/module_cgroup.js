@@ -1,11 +1,12 @@
-//Group of enemies. D:
+//Group of enemies. D: Contains and manages
 var Cgroup = (function()
 {
-    var enemies;
-    var mercies;
-    var defends;
+    var enemies;    //List of enemies.
+    var mercies;    //List of mercies.
+    var defends;    //List of defends.
     
-    function init()
+    //Setup
+    function setup()
     {
         enemies = [
             new Cenemy(new Vect(185, 220, 0)),
@@ -24,11 +25,13 @@ var Cgroup = (function()
         xhr.send();
     }
     
+    //Load an animation
     function loadAnimation(index, text, pos)
     {
         enemies[index].setAnimation(text, pos);
     }
 
+    //Update
     function update(dt)
     {
         for(var i = 0; i < enemies.length; i++)
@@ -36,7 +39,8 @@ var Cgroup = (function()
             enemies[i].update(dt);
         }
     }
-
+    
+    //Draw
     function draw(ctx)
     {
         for(var i = 0; i < enemies.length; i++)
@@ -44,12 +48,14 @@ var Cgroup = (function()
             enemies[i].draw(ctx);
         }   
     }
-
+    
+    //Geter for a defend.
     function getDefends()
     {
         return defends[0];
     }
 
+    //Geter for an array of enemy names.
     function getNames()
     {
         var names = [];
@@ -59,62 +65,68 @@ var Cgroup = (function()
         }
         return names;
     }
-
+    
+    //Getter for enemy text.
     function getText()
     {
         return enemies[0].texts[0];
     }
-
-    function getActs()
+    
+    //Getter for acts based on enemy index
+    function getActs(selectStateEnemy)
     {
-        var acts = [];
-        for(var i = 0; i < enemies.length; i++)
-        {
-            acts.push(enemies[i].acts);
-        }
-        return acts;
+        return enemies[selectStateEnemy].acts;
     }
-
+    
+    //Getter for responses based on enemy index
     function getRes(selectStateEnemy, selectStateOther)
     {
         return enemies[selectStateEnemy].ress[selectStateOther]
     }
     
+    //Getter for Health bar position based on enemy index
     function getDamagePos(selectStateEnemy)
     {
         return enemies[selectStateEnemy].damagePos;
     }
     
+    //Getter for Health bar velocity based on enemy index
     function getDamageVel(selectStateEnemy)
     {
         return enemies[selectStateEnemy].damageVel;
     }
     
+    //Get the maximum hp based on enemy index
     function getMaxHP(selectStateEnemy)
     {
         return enemies[selectStateEnemy].maxHP;
     }
     
+    //Get the current hp based on enemy index
     function getCurHP(selectStateEnemy)
     {
         return enemies[selectStateEnemy].curHP;
     }
     
+    //Get the bubble position based on enemy index
     function getBubblePos(selectStateEnemy)
     {
         return enemies[selectStateEnemy].bubblePos;
     }
     
+    //Get the bubble offset based on enemy index
     function getBubbleOff(selectStateEnemy)
     {
         return enemies[selectStateEnemy].bubbleOff;
     }
-
+    
+    //Get all mercies.
     function getMercies()
     {
         return mercies;
     }
     
+    //Get all crap.
     function dealDamage(selectStateEnemy, damage)
     {
         enemies[selectStateEnemy].curHP -=
@@ -128,8 +140,9 @@ var Cgroup = (function()
         return false;
     }
     
+    //Return
     return {
-        init : init,
+        setup : setup,
         loadAnimation : loadAnimation,
         update : update,
         draw : draw,

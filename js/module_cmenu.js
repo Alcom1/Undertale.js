@@ -1,16 +1,17 @@
-//Combat Menu Module
+//Combat Menu Module. Displays the bottom menu buttons during the combat sequence.
 var Cmenu = (function()
 {
-    var buttonFight;
-    var buttonAct;
-    var buttonItem;
-    var buttonMercy;
+    var buttonFight;        //Image for fight button.
+    var buttonAct;          //Image for act button.
+    var buttonItem;         //Image for item button.
+    var buttonMercy;        //Image for mercy button.
     
-    var buttonFightOver;
-    var buttonActOver;
-    var buttonItemOver;
-    var buttonMercyOver;
+    var buttonFightOver;    //Image for fight selected button.
+    var buttonActOver;      //Image for act selected button.
+    var buttonItemOver;     //Image for item selected button.
+    var buttonMercyOver;    //Image for mercy selected button.
     
+    //Init
     function init()
     {
         buttonFight = document.getElementById("button_fight");
@@ -24,6 +25,7 @@ var Cmenu = (function()
         buttonMercyOver = document.getElementById("button_mercy_over");        
     }
 
+    //Draw
     function draw(ctx, menuState, selectState)
     {
         ctx.save();
@@ -48,8 +50,9 @@ var Cmenu = (function()
         ctx.restore();
     }
     
+    //Return
     return{
         init : init,
-        draw : draw
+        draw : draw,
     }
 }());

@@ -12,9 +12,9 @@ var Cwriter = (function()
     var timeCounter;           //Tracks time for character counting.
     
     var horizontalPositions;   //Positions for horizontal menu.
-    
     var verticalPositions;     //Positions for vertical menu.
     
+    //Init
     function init()
     {
         horizontalPositions =
@@ -36,7 +36,7 @@ var Cwriter = (function()
     }
     
     //Set the time delays of the writer.
-    function setTimes(
+    function setupTimes(
         _timeAsterisk,
         _timePeriod,
         _timeComma,
@@ -50,7 +50,7 @@ var Cwriter = (function()
     }
     
     //Set the text for the writer and reset counters.
-    function setText(_text)
+    function setupText(_text)
     {
         text = _text;
         charCounter = -1;           //Counter for the index of the most recent displayed character.
@@ -308,10 +308,11 @@ var Cwriter = (function()
         return pos;
     }
     
+    //Return
     return{
         init : init,
-        setTimes : setTimes,
-        setText : setText,
+        setupTimes : setupTimes,
+        setupText : setupText,
         update : update,
         drawText : drawText,
         drawMenu : drawMenu,

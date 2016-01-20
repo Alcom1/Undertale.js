@@ -1,29 +1,30 @@
-//Inherits from Obj. Draws a bullet at a centered position with a width and height.
-var Bbox = (function()
+//Module that displays, updates, and manages the bullet box.
+var Cbbox = (function()
 {
-    var pos;
-    var width;
-    var height;
-    var speed;
-    var newWidth;
-    var newHeight;
+    var pos;                 //Centered position of the bullet box.
+    var width;               //Width of the bullet box.
+    var height;              //Height of the bullet box.
+    var speed;			     //Speed at which box grows and shrinks.
+    var newWidth;            //Bullet box width to transition to.
+    var newHeight;           //BUllet box height to transition to.
     
+    //Init
     function init()
     {
-
+        pos = new Vect(320, 320, 0);
+        speed = 600;
     }
     
-    function setup(_pos, _width, _height)
+    //Setup with position, width
+    function setup(_width, _height)
     {
-        pos = _pos;
-        width = _width;			//Width of box
-        height = _height;		//Height of box
-        speed = 600;			//Speed at which box grows and shrinks.
-        newWidth = _width;		//Width of box to transition to
-        newHeight = _height;	//Height of box to transition to       
+        width = _width;
+        height = _height;
+        newWidth = _width;
+        newHeight = _height;     
     }
 
-    //Resize Bbox in case
+    //Update with box resizing
     function update(dt)
     {
         if(width < newWidth)			//X Grow
@@ -103,6 +104,7 @@ var Bbox = (function()
         }
     }
     
+    //Return
     return{
         init : init,
         setup : setup,
@@ -112,4 +114,3 @@ var Bbox = (function()
         setSize : setSize,
     }
 }());
-

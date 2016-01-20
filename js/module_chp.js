@@ -1,13 +1,15 @@
-//Combat hp display module
+//Combat hp display module. Displays the Player's HP during the combat sequence.
 var Chp = (function()
 {
-    var hpText;
+    var hpText; //"HP" image that literally displays the letters 'H' and 'P' and nothing else.
 
+    //Init
     function init()
     {
         hpText = document.getElementById("hp"); 
     }
-
+    
+    //Draw
     function draw(ctx, cur, max)
     {
         ctx.save();
@@ -31,6 +33,7 @@ var Chp = (function()
         ctx.restore();        
     }
     
+    //Return
     return {
         init : init,
         draw : draw
