@@ -16,20 +16,39 @@ var Cenemy = function(pos)
     this.bubblePos = pos.getAdd(new Vect(80, -80, 0));
     this.bubbleOff = 30;
     this.active = false;
+    this.modelPoses = [];
+    this.animations = [];
 }
 
-Cenemy.prototype.setAnimation = function(text, pos)
+Cenemy.prototype.addAnimation = function(text, pos)
 {
     this.active = true;
-    this.modelPos = pos;
-    this.animation = new Animation(text, "teapot");
+    this.modelPoses.push(pos);
+    this.animations.push(new Animation(text));
+    this.sortAnimations();
+}
+
+Cenemy.prototype.sortAnimations = function()
+{
+    for(var i = this.animations.length - 1; i > 0; i--)
+    {
+        if(this.animations[i].zindex > this.animations[i - 1].zindex)
+        {
+            var temp = this.animations[i];
+            this.animations[i] = this.animations[i - 1];
+            this.animations[i - 1] = temp;
+        }    
+    }
 }
 
 Cenemy.prototype.update = function(dt)
 {
     if(this.active)
     {
-        this.animation.update(dt);
+        for(var i = 0; i < this.animations.length; i++)
+        {
+            this.animations[i].update(dt);
+        }
     }
 }
 
@@ -37,9 +56,12 @@ Cenemy.prototype.draw = function(ctx)
 {
     if(this.active)
     {
-        ctx.save();
-        ctx.translate(this.modelPos.x, this.modelPos.y);
-        this.animation.draw(ctx);
-        ctx.restore();
+        for(var i = 0; i < this.animations.length; i++)
+        {
+            ctx.save();
+            ctx.translate(this.modelPoses[i].x, this.modelPoses[i].y);
+            this.animations[i].draw(ctx);
+            ctx.restore();
+        }
     }
 }

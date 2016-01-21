@@ -1,37 +1,25 @@
 {
-    "image_id" : "test",
+    "image_id" : "drone_4",
     "length" : 3000,
-    "type" : 0,
+    "zindex" : 1,
     "rotate" : [
         {
             "time" : 0,
-            "move" : -5
+            "move" : 0
         },
         {
             "time" : 1500,
-            "move" : 5
+            "move" : -180
         },
         {
             "time" : 3000,
-            "move" : -5
+            "move" : -360
         }
     ],
     "scale" : [
         {
             "time" : 0,
             "move" : [2, 2]
-        },
-        {
-            "time" : 750,
-            "move" : [2, 1.6]
-        },
-        {
-            "time" : 1500,
-            "move" : [2, 2]
-        },
-        {
-            "time" : 2250,
-            "move" : [2, 1.6]
         },
         {
             "time" : 3000,
@@ -41,11 +29,11 @@
     "translate" : [
         {
             "time" : 0,
-            "move" : [-48, -95]
+            "move" : [-30, -30]
         },
         {
             "time" : 3000,
-            "move" : [-48, -95]
+            "move" : [-30, -30]
         }
     ]
 }

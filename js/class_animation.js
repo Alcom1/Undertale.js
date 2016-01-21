@@ -1,12 +1,13 @@
-var Animation = function(text, id)
+var Animation = function(text)
 {
     var anim = JSON.parse(text);
     this.active = true;
-    this.image = document.getElementById(id);
+    this.image = document.getElementById(anim.image_id);
     this.length = anim.length;
     this.rotate = anim.rotate;
     this.scale = anim.scale;
     this.translate = anim.translate;
+    this.zindex = anim.zindex;
     this.time = 0;
 }
 

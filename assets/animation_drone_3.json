@@ -1,0 +1,35 @@
+{
+    "image_id" : "drone_3",
+    "length" : 3000,
+    "zindex" : 2,
+    "rotate" : [
+        {
+            "time" : 0,
+            "move" : 0
+        }
+    ],
+    "scale" : [
+        {
+            "time" : 0,
+            "move" : [2, 2]
+        },
+        {
+            "time" : 3000,
+            "move" : [2, 2]
+        }
+    ],
+    "translate" : [
+        {
+            "time" : 0,
+            "move" : [-30, -31]
+        },
+        {
+            "time" : 1500,
+            "move" : [-30, -29]
+        },
+        {
+            "time" : 3000,
+            "move" : [-30, -31]
+        }
+    ]
+}

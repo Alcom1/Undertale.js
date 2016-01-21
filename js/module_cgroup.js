@@ -14,21 +14,27 @@ var Cgroup = (function()
         mercies = ["|#FF0Spare", "Flee"];
         defends = [new Cdefend()];
         
-        var xhr = new XMLHttpRequest();
-        xhr.overrideMimeType("application/json");
-        xhr.onload = function()
+        for(var i = 1; i <= 4; i ++)
         {
-            Cgroup.loadAnimation(0, xhr.responseText, new Vect(185, 290, 0));
-            Cgroup.loadAnimation(1, xhr.responseText, new Vect(445, 290, 0));
+            (function(i)
+            {
+                var xhr = new XMLHttpRequest();
+                xhr.overrideMimeType("application/json");
+                xhr.onload = function()
+                {
+                    Cgroup.loadAnimation(0, xhr.responseText, new Vect(185, 170, 0));
+                    Cgroup.loadAnimation(1, xhr.responseText, new Vect(445, 170, 0));
+                }
+                xhr.open('GET', "assets/animation_drone_" + i + ".json", true);
+                xhr.send();
+            }(i))
         }
-        xhr.open('GET', "assets/animation.json", true);
-        xhr.send();
     }
     
     //Load an animation
     function loadAnimation(index, text, pos)
     {
-        enemies[index].setAnimation(text, pos);
+        enemies[index].addAnimation(text, pos);
     }
 
     //Update
