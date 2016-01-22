@@ -1,11 +1,12 @@
 //Enemy object
 var Cenemy = function(pos)
 {
-    this.name = "Utah Teapot";
-    this.texts = ["* Teapots?", "* |#FF0JavaScript|#FFF is a high-level,  dynamic,  \nuntyped,  and interpreted programming \nlanguage.  -Wikipedia"];
+    this.name = "MAD-" + (Math.random() * 652 + 79).toFixed();
+    this.texts = ["* Robotic spheres descend from the\nceiling."];
     this.speech = ["Null", "Beep.", "Boop."];
-    this.acts = ["Check"];
-    this.ress = ["* Utah Teapot 3 ATK 7 DEF * Likes to test shaders in its free \ntime."];
+    this.acts = ["Check", "Turn Off", "Stare"];
+    this.ress = [
+        "* " + this.name + "   2 ATK 12 DEF * Monitoring & Defense unit. Someone\nmight get mad if you broke it."];
     this.atk = 5;
     this.def = 5;
     this.maxHP = 200;
@@ -24,7 +25,7 @@ Cenemy.prototype.addAnimation = function(text, pos)
 {
     this.active = true;
     this.modelPoses.push(pos);
-    this.animations.push(new Animation(text));
+    this.animations.push(new Animation(text, this.name));
     this.sortAnimations();
 }
 

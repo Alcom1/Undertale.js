@@ -213,19 +213,19 @@ var Soul = (function()
     {
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_UP])
         {
-            pos.y -= Math.round(speed * dt);	//Round positions for pixel-perfect positioning.
+            pos.y -= speed * dt;
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_RIGHT])
         {
-            pos.x += Math.round(speed * dt);
+            pos.x += speed * dt;
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_DOWN])
         {
-            pos.y += Math.round(speed * dt);
+            pos.y += speed * dt;
         }
         if(myKeys.keydown[myKeys.KEYBOARD.KEY_LEFT])
         {
-            pos.x -= Math.round(speed * dt);
+            pos.x -= speed * dt;
         }
     }
 
