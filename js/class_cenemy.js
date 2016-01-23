@@ -25,7 +25,15 @@ Cenemy.prototype.addAnimation = function(text, pos)
 {
     this.active = true;
     this.modelPoses.push(pos);
-    this.animations.push(new Animation(text, this.name));
+    var anim = JSON.parse(text);
+    if(anim.image_id == "drone_2")
+    {
+        this.animations.push(new AnimationNum(anim, this.name));
+    }
+    else
+    {
+        this.animations.push(new Animation(anim));
+    }
     this.sortAnimations();
 }
 
