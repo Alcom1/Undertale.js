@@ -2,11 +2,26 @@
 var Cenemy = function(pos)
 {
     this.name = "MAD-" + (Math.random() * 652 + 79).toFixed();
-    this.texts = ["* Robotic spheres descend from the\nceiling."];
+    this.texts = ["* Spherical drones descend from the\nceiling!"];
     this.speech = ["Null", "Beep.", "Boop."];
     this.acts = ["Check", "Turn Off", "Stare"];
     this.ress = [
-        "* " + this.name + "   2 ATK 12 DEF * Monitoring & Defense unit. Someone\nmight get mad if you broke it."];
+        "* " + this.name + "   2 ATK 12 DEF * Monitor & Defense drone. Someone\nmight get mad if you broke it.",
+        "* You reach for the drone's off\nswitch.",
+        "* You stare at the drone. It recorded\nthat you stared at it."];
+    this.ressFunctions = [
+        function()
+        {
+            console.log("actFunction 1");
+        },
+        function()
+        {
+            console.log("actFunction 2");
+        },
+        function()
+        {
+            console.log("actFunction 3");
+        }];
     this.atk = 5;
     this.def = 5;
     this.maxHP = 200;

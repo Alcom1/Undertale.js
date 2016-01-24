@@ -87,7 +87,8 @@ var Cgroup = (function()
     //Getter for responses based on enemy index
     function getRes(selectStateEnemy, selectStateOther)
     {
-        return enemies[selectStateEnemy].ress[selectStateOther]
+        enemies[selectStateEnemy].ressFunctions[selectStateOther]();
+        return enemies[selectStateEnemy].ress[selectStateOther];
     }
     
     //Getter for Health bar position based on enemy index
