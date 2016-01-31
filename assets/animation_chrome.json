@@ -1,0 +1,47 @@
+{
+    "image_id" : "chrome",
+    "length" : 3000,
+    "zindex" : 4,
+    "rotate" : [
+        {
+            "time" : 0,
+            "move" : 0
+        },
+        {
+            "time" : 0,
+            "move" : 360
+        }
+    ],
+    "scale" : [
+        {
+            "time" : 0,
+            "move" : [2, 2]
+        },
+        {
+            "time" : 750,
+            "move" : [1.9, 1.9]
+        },
+        {
+            "time" : 1500,
+            "move" : [2, 2]
+        },
+        {
+            "time" : 2250,
+            "move" : [1.9, 1.9]
+        },
+        {
+            "time" : 3000,
+            "move" : [2, 2]
+        }
+    ],
+    "translate" : [
+        {
+            "time" : 0,
+            "move" : [-320, -240]
+        },
+        {
+            "time" : 3000,
+            "move" : [-320, -240]
+        }
+    ]
+}
