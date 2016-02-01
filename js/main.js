@@ -18,8 +18,9 @@ var main =
 	gameState : undefined,
 	GAME_STATE: Object.freeze
 	({
-        FLASH : 0,
-		COMBAT : 1,
+        START : 0,
+        FLASH : 1,
+		COMBAT : 2,
 	}),
 	
     //Initialization
@@ -87,6 +88,10 @@ var main =
 	{
         switch(this.gameState)
         {
+            case this.GAME_STATE.START:
+                if(true)
+                    this.gameState = this.GAME_STATE.START;
+                break;
             case this.GAME_STATE.FLASH:
                 if(Flash.update(dt))
                     this.gameState = this.GAME_STATE.COMBAT;
@@ -102,6 +107,8 @@ var main =
 	{
         switch(this.gameState)
         {
+            case this.GAME_STATE.START:
+                break;
             case this.GAME_STATE.FLASH:
                 Flash.draw(ctx);
                 break;
