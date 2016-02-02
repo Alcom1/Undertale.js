@@ -39,7 +39,7 @@ var main =
 		this.ctx.imageSmoothingEnabled = false;
         
         //Game State
-        this.gameState = this.GAME_STATE.FLASH;
+        this.gameState = this.GAME_STATE.START;
         
         //Setup combat module.
         Combat.setup(this.ctx);
