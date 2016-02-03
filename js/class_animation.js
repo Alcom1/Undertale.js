@@ -1,3 +1,4 @@
+//Animation constructor
 var Animation = function(anim)
 {
     this.active = true;
@@ -10,11 +11,13 @@ var Animation = function(anim)
     this.time = 0;
 }
 
+//Update
 Animation.prototype.update = function(dt)
 {
     this.time += dt;
 }
 
+//Draw
 Animation.prototype.draw = function(ctx)
 {
     ctx.save();
@@ -31,6 +34,7 @@ Animation.prototype.draw = function(ctx)
     ctx.restore();
 }
 
+//Perform a transformation based on its type
 Animation.prototype.transform = function(ctx, step, form, type)
 {
     for(var i = 0; i < form.length - 1; i++)
