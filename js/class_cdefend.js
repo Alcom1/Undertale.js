@@ -1,21 +1,25 @@
+//Cdefend constructor
 var Cdefend = function()
 {
     this.width = 140;
     this.height = 140;
 }
 
+//Setup
 Cdefend.prototype.setup = function()
 {
     this.durationCounter = 0;
     this.duration = 5.35;
 }
 
+//Update
 Cdefend.prototype.update = function(dt)
 {
     this.durationCounter += dt;
     return this.durationCounter > this.duration;
 }
 
+//Draw
 Cdefend.prototype.draw = function(ctx)
 {
     ctx.save();
