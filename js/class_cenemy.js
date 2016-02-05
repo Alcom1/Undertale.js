@@ -1,4 +1,4 @@
-//Enemy object
+//Enemy Constructor
 var Cenemy = function(pos)
 {
     this.name = "MAD-" + (Math.random() * 652 + 79).toFixed();
@@ -36,6 +36,7 @@ var Cenemy = function(pos)
     this.animations = [];
 }
 
+//Add an animtion
 Cenemy.prototype.addAnimation = function(text, pos)
 {
     this.active = true;
@@ -52,6 +53,7 @@ Cenemy.prototype.addAnimation = function(text, pos)
     this.sortAnimations();
 }
 
+//Sort animations
 Cenemy.prototype.sortAnimations = function()
 {
     for(var i = this.animations.length - 1; i > 0; i--)
@@ -65,6 +67,7 @@ Cenemy.prototype.sortAnimations = function()
     }
 }
 
+//Update
 Cenemy.prototype.update = function(dt)
 {
     if(this.active)
@@ -76,6 +79,7 @@ Cenemy.prototype.update = function(dt)
     }
 }
 
+//Draw
 Cenemy.prototype.draw = function(ctx)
 {
     if(this.active)
