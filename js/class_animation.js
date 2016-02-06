@@ -1,20 +1,19 @@
 //Animation constructor
 var Animation = function(anim)
 {
-    this.active = true;
-    this.image = document.getElementById(anim.image_id);
-    this.length = anim.length;
-    this.rotate = anim.rotate;
-    this.scale = anim.scale;
-    this.translate = anim.translate;
-    this.zindex = anim.zindex;
-    this.time = 0;
+    this.image = document.getElementById(anim.image_id);    //Image to be animated.
+    this.length = anim.length;                              //Duration of animation in milliseconds
+    this.rotate = anim.rotate;                              //Rotation transformation keyframes array.
+    this.scale = anim.scale;                                //Scaling transformation keyframes array.
+    this.translate = anim.translate;                        //Translation transformation keyframes array.
+    this.zindex = anim.zindex;                              //z-index of the animation.
+    this.time = 0;                                          //Current time of the animation.
 }
 
 //Update
 Animation.prototype.update = function(dt)
 {
-    this.time += dt;
+    this.time += dt;    //Increment time.
 }
 
 //Draw
