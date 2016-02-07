@@ -19,7 +19,7 @@ Animation.prototype.update = function(dt)
 //Draw
 Animation.prototype.draw = function(ctx)
 {
-    ctx.save();
+    ctx.save(); //?!
     var step = (this.time * 1000) % this.length;
     
     this.transform(ctx, step, this.rotate, 2);
