@@ -108,12 +108,11 @@ var Cwriter = (function()
                 Sound.playSound("text", false); 
                 timeCheck = timeStandard;
             }
-            
         }
         
         if(charCounter >= text.length - 1)
         {
-            Sound.pauseSoundHard("text"); 
+            Sound.pauseSoundHard("text");
         }  
     }
     
@@ -282,7 +281,7 @@ var Cwriter = (function()
     function reset()
     {
         charCounter = -1;
-        timeCounter = timeAsterisk;  
+        timeCounter = 0;  
     }
 
     //Get the soul position for the option at a given menu index and style
