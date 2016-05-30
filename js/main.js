@@ -90,7 +90,7 @@ var main =
         {
             case this.GAME_STATE.START:
                 if(true)
-                    this.gameState = this.GAME_STATE.START;
+                    this.gameState = this.GAME_STATE.FLASH;
                 break;
             case this.GAME_STATE.FLASH:
                 if(Flash.update(dt))
